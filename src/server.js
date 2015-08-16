@@ -38,9 +38,29 @@ var loader = require('./shared/helpers/load.js');
 var helpers = {loader:loader};
 loader(__dirname + '/shared/helpers', /\.helper\.js$/, function(file) {
     var name = _.camelCase(file.filename.replace(/\..*/, ''));
-    helpers[name] = require(file.fullPathname);
-    //log.info('Helper', 'Loading ' + name);
+    helpers[name] = require(file.fullPathname)({
+        app:app, 
+        mongoose:mongoose,
+        config: configuration,
+        helpers: helpers,
+        log: log
+    });
     log.info('HELPERS: Loading ' + name);
+});
+
+// LOAD MIDDLEWARES
+// =============================================================================
+var middlewares = {};
+loader(__dirname + '/shared/middlewares', /\.middleware\.js$/, function(file) {
+    var name = _.camelCase(file.filename.replace(/\..*/, ''));
+    middlewares[name] = require(file.fullPathname)({
+        app:app, 
+        mongoose:mongoose,
+        config: configuration,
+        helpers: helpers,
+        log: log
+    });
+    log.info('MIDDLEWARES: Loading ' + name);
 });
 
 // REGISTER OUR ROUTES
@@ -50,10 +70,11 @@ require('./server.route.js')({
     mongoose:mongoose,
     config: configuration,
     helpers: helpers,
-    log: log
+    log: log,
+    middlewares: middlewares
 });
 
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-log.info('Magic happens on port ' + port);
+log.info('Server is listening on port ' + port);

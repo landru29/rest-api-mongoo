@@ -19,11 +19,12 @@ module.exports = function(server) {
     router.post('/', function(req, res) {
         var checker = server.helpers.mendatoryFieldsError(req.body, {
             name: /^[\w\s]*$/,
-            email: true
+            email: true,
+            password: true
         });
         if (!checker) {
-            controller.createUser(req.body, function(err) {
-                server.helpers.response(req, res, err, null, {message: {success: 'User created'}});
+            controller.createUser(req.body, function(err, data) {
+                server.helpers.response(req, res, err, data, {message: {success: 'User created'}});
             });
         } else {
              server.helpers.response(req, res, checker, null);
