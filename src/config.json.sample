@@ -1,0 +1,12 @@
+{
+    "application": {
+        "database": {
+            "host": "localhost",
+            "port": "27017",
+            "name": "test"
+        }
+    },
+    "server": {
+        "port": 8080
+    }
+}
