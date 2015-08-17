@@ -24,6 +24,17 @@ var UserSchema   = new Schema({
     password: {
         type: String,
         required: true
+    },
+    active: {
+        type: Boolean,
+        required: true
+    }
+});
+
+UserSchema.set('toJSON', {
+    transform: function(doc, ret, options) {
+        delete ret.password;
+        return ret;
     }
 });
 
@@ -39,5 +50,9 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
     var user = this;
     return (user.password === crypto.createHash('sha256').update(candidatePassword).digest('hex'));
 };
+
+UserSchema.methods.isActive = function() {
+    return this.active;
+}
 
 module.exports = mongoose.model('User', UserSchema);

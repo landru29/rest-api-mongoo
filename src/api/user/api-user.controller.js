@@ -43,6 +43,7 @@ module.exports = function (server) {
         user.name = userData.name;
         user.email = userData.email;
         user.password = userData.password;
+        user.active = true;
         user.save(function(err, createdUser) {
             if (!err) {
                 callback(null, {'refresh-token': generateRefreshToken(createdUser)});
