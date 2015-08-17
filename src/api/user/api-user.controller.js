@@ -1,6 +1,6 @@
 module.exports = function (server) {
     'use strict';
-    var User = require('./api-user.model.js');
+    var User = server.models.User;
     var _ = require('lodash');
     
     /**
