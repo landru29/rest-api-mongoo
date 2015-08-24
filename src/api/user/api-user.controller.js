@@ -44,6 +44,9 @@ module.exports = function (server) {
         user.email = userData.email;
         user.password = userData.password;
         user.active = true;
+        if (userData.role) {
+            user.role = userData.role;
+        }
         user.save(function(err, createdUser) {
             if (!err) {
                 callback(null, {'refresh-token': generateRefreshToken(createdUser)});
@@ -75,8 +78,15 @@ module.exports = function (server) {
             if (err) {
                 return callback(err);
             }
-
-            user.name = userData.name;
+            if (userData.name) {
+                user.name = userData.name;
+            }
+            if (userData.password) {
+                user.password = userData.password;
+            }
+            if (userData.role) {
+                user.role = userData.role;
+            }
             user.save(callback);
         });
     }

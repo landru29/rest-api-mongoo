@@ -1,23 +1,24 @@
+/*global module, require*/
 module.exports = function (server) {
-     'use strict';
+    'use strict';
     return function (fields, descriptor) {
         var _ = require('lodash');
 
         // All keys in fields has a descriptor
-        for (var key in fields) {
-            if (fields.hasOwnProperty(key) && !descriptor.hasOwnProperty(key)) {
-                return 'Unknown property: ' + key;
+        for (var keyF in fields) {
+            if (fields.hasOwnProperty(keyF) && !descriptor.hasOwnProperty(keyF)) {
+                return 'Unknown property: ' + keyF;
             }
         }
 
         // All mendatory fields are present
-        for (var key in descriptor) {
-            if (descriptor.hasOwnProperty(key) && descriptor[key] && !fields.hasOwnProperty(key)) {
-                return 'Missing property: ' + key;
+        for (var keyD in descriptor) {
+            if (descriptor.hasOwnProperty(keyD) && descriptor[keyD] && !fields.hasOwnProperty(keyD)) {
+                return 'Missing property: ' + keyD;
             }
-            if (descriptor.hasOwnProperty(key) && descriptor[key] && fields.hasOwnProperty(key)) {
-                if ((_.isRegExp(descriptor[key])) && (!descriptor[key].test(fields[key]))) {
-                    return 'Bad value: ' + key;
+            if (descriptor.hasOwnProperty(keyD) && descriptor[keyD] && fields.hasOwnProperty(keyD)) {
+                if ((_.isRegExp(descriptor[keyD])) && (!descriptor[keyD].test(fields[keyD]))) {
+                    return 'Bad value: ' + keyD;
                 }
             }
         }

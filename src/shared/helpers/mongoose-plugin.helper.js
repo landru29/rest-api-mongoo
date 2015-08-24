@@ -1,3 +1,4 @@
+/*global module*/
 module.exports = function (server) {
     'use strict';
     return function (model) {

@@ -1,0 +1,37 @@
+{
+    "api": {
+        "user": {
+            "/": {
+                "$GET": {
+                    "role": ["admin"]
+                },
+                "$POST": {
+                    "role": ["admin"]
+                }
+            },
+            "/:id": {
+                "$GET": {
+                    "role": ["admin"]
+                },
+                "$DELETE": {
+                    "role": ["admin"]
+                },
+                "$PUT": {
+                    "role": ["admin"]
+                }
+            },
+            "refresh-token": {
+                "$POST": {
+                    "role": "*"
+                }
+            }
+        },
+        "login": {
+            "/": {
+                "$POST": {
+                    "role": "*"
+                }
+            }
+        }
+    }
+}

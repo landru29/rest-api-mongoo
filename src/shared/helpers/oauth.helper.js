@@ -1,11 +1,16 @@
+/*global module, require*/
 module.exports = function (server) {
     'use strict';
     var jwt = require('jsonwebtoken');
     
     function getEncryptor(encryptorName) {
-        if (!encryptorName) throw 'No encryptor specified';
+        if (!encryptorName) {
+            throw 'No encryptor specified';
+        }
         var encryptor = server.config.oauth[encryptorName];
-        if (!encryptor) throw 'Bad encryptor specified';
+        if (!encryptor) {
+            throw 'Bad encryptor specified';
+        }
         return encryptor;
     }
     

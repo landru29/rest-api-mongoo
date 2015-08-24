@@ -1,14 +1,15 @@
+/*global module*/
 module.exports = function (server) {
     'use strict';
     var User = server.models.User;
 
     function generateAccessToken(refreshToken, callback) {
-        console.log(refreshToken)
         server.helpers.oauth.decrypt(refreshToken, 'refresh-token', function (err, data) {
             if (!err) {
                 User.findById(data._id, function (err, userData) {
                     if ((!err) && (userData) && (userData.isActive())) {
                         data.created = new Date().getTime();
+                        data.role = userData.role;
                         var accessToken = server.helpers.oauth.encrypt(data, 'access-token');
                         callback(null, {
                             'access-token': accessToken

@@ -7,10 +7,16 @@
     },
     "dependencies": {
         "express": "4.13.3",
+        "acl": "0.4.8",
         "mongoose": "4.1.2",
+        "mongoose-type-email": "1.0.0",
         "body-parser": "1.13.3",
         "lodash": "3.10.1",
         "bunyan": "1.4.0",
-        "jsonwebtoken": "5.0.4"
+        "jsonwebtoken": "5.0.4",
+        "path-to-regexp": "1.2.1"
+    },
+    "devDependencies": {
+        "jshint": "2.8.0"
     }
 }
