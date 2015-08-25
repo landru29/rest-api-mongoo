@@ -1,29 +1,12 @@
 (function () {
     'use strict';
-    var mongoose = require('mongoose');
-    var configuration = require('../config.json');
-    var loader = require('../shared/helpers/load.js');
-    var _ = require('lodash');
-    mongoose.connect('mongodb://' +
-        configuration.application.database.host + ':' +
-        configuration.application.database.port + '/' +
-        configuration.application.database.name
-    );
-    var userSchema = require('../shared/schemas/user.schema.js')();
-    var data = {
-        models: {
-            User: mongoose.model('User', userSchema)
-        },
-        helpers: {},
-        config: configuration
-    }
-    
-    loader(__dirname + '/../shared/helpers', /\.helper\.js$/, function (file) {
-        var name = _.camelCase(file.filename.replace(/\..*/, ''));
-        data.helpers[name] = require(file.fullPathname)(data);
+    var globals = require('../global-loader.js')({
+        options: {
+            logQuiet: true
+        }
     });
     
-    var controller = require('../api/user/api-user.controller.js')(data);
+    var controller = require('../api/user/api-user.controller.js')(globals);
     var args = {};
 
     process.argv.forEach(function (val, index, array) {
@@ -41,13 +24,13 @@
                 console.log('insert', args);
                 controller.createUser(args, function(err, data){
                     console.log(err, data);
-                    mongoose.disconnect();
+                    globals.mongoose.disconnect();
                 });
                 break;
             case 'read':
                 controller.readUsers(function(err, data) {
                     console.log(err, data);
-                    mongoose.disconnect();
+                    globals.mongoose.disconnect();
                 });
                 break;
             case 'delete':
@@ -57,7 +40,7 @@
                     } else {
                         console.log(err);
                     }
-                    mongoose.disconnect();
+                    globals.mongoose.disconnect();
                 });
                 break;
             case 'update':
@@ -69,14 +52,14 @@
                     } else {
                         console.log(err);
                     }
-                    mongoose.disconnect();
+                    globals.mongoose.disconnect();
                 });
                 break;
             default:
-                mongoose.disconnect();
+                globals.mongoose.disconnect();
         }
     } else {
-        mongoose.disconnect();
+        globals.mongoose.disconnect();
     }
 
 })();
