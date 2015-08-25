@@ -14,8 +14,7 @@
         "lodash": "3.10.1",
         "bunyan": "1.4.0",
         "jsonwebtoken": "5.0.4",
-        "path-to-regexp": "1.2.1",
-        "dev-null": "0.1.1"
+        "path-to-regexp": "1.2.1"
     },
     "devDependencies": {
         "jshint": "2.8.0"
