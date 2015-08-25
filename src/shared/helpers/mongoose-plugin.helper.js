@@ -4,7 +4,7 @@ module.exports = function (server) {
     return function (model) {
         for (var name in server.mongoosePlugins) {
             if (server.mongoosePlugins.hasOwnProperty(name)) {
-                server.log.info('   * applying plugin ' + name);
+                server.log.info('   *', 'applying plugin ' + name);
                 model.plugin(server.mongoosePlugins[name], {});
             }
         }

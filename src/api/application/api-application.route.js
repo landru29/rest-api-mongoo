@@ -2,31 +2,28 @@ module.exports = function(server) {
     'use strict';
     var express = require('express'); 
     var router = express.Router();
-    var controller = server.controllers.user;
-    
-    router.use('/refresh-token', require('./refresh-token/api-user-refresh-token.route.js')(server));
+    var controller = server.controllers.application;
+
 
     router.get('/', function (req, res) {
-        controller.readUsers(function(err, data) {
+        controller.readApplications(function(err, data) {
             server.helpers.response(req, res, err, data);
         });
     });
     
     router.get('/:id', function(req, res) {
-        controller.readUserById(req.params.id, function(err, data) {
+        controller.readApplicationById(req.params.id, function(err, data) {
             server.helpers.response(req, res, err, data);
         });
     });
     
     router.post('/', function(req, res) {
         var checker = server.helpers.mendatoryFieldsError(req.body, {
-            name: /^[\w\s]*$/,
-            email: true,
-            password: true
+            name: /^[\w\s]*$/
         });
         if (!checker) {
-            controller.createUser(req.body, function(err, data) {
-                server.helpers.response(req, res, err, data, {message: {success: 'User created'}});
+            controller.createApplication(req.body, function(err, data) {
+                server.helpers.response(req, res, err, data, {message: {success: 'Application created'}});
             });
         } else {
              server.helpers.response(req, res, checker, null);
@@ -34,16 +31,16 @@ module.exports = function(server) {
     });
     
     router.delete('/:id', function (req, res) {
-        controller.deleteUser(req.params.id, function(err, data) {
-            server.helpers.response(req, res, err, null, {message: {success: 'User deleted'}});
+        controller.deleteApplication(req.params.id, function(err, data) {
+            server.helpers.response(req, res, err, null, {message: {success: 'Application deleted'}});
         });
     });
     
     router.put('/:id', function (req, res) {
-        controller.updateUser(req.params.id, {
+        controller.updateApplication(req.params.id, {
             name: req.body.name
         }, function(err, data) {
-            server.helpers.response(req, res, err, data, {message: {success: 'User updated'}});
+            server.helpers.response(req, res, err, data, {message: {success: 'Application updated'}});
         });
     });
     

@@ -2,7 +2,7 @@ module.exports = function(server) {
     'use strict';
     var express = require('express'); 
     var router = express.Router();
-    var controller = require('./api-user-refresh-token.controller.js')(server);
+    var controller = server.controllers.refreshToken;
     
     
     router.post('/', function (req, res) {

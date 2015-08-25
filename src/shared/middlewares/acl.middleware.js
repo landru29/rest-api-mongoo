@@ -17,7 +17,7 @@ module.exports = function (server) {
                     loadRoute(node[subPath], path.join(baseRoute, subPath), collection);
                 } else {
                     var method = subPath.replace(/^\$/, '').toLowerCase();
-                    server.log.info(' -', 'ACL', baseRoute, method.toUpperCase());
+                    server.log.info('   *', 'ACL', baseRoute, method.toUpperCase());
                     if (!collection[baseRoute]) {
                         collection[baseRoute] = {};
                     }

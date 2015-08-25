@@ -2,7 +2,7 @@ module.exports = function(server) {
     'use strict';
     var express = require('express'); 
     var router = express.Router();
-    var controller = require('../user/api-user.controller.js')(server);
+    var controller = server.controllers.user;
 
     
     router.post('/', function(req, res) {

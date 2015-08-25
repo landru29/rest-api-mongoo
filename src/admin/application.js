@@ -6,7 +6,7 @@
         }
     });
     
-    var controller = require('../api/user/api-user.controller.js')(globals);
+    var controller = globals.controllers.application;
     var args = {};
 
     process.argv.forEach(function (val, index, array) {
@@ -21,22 +21,22 @@
         delete args.action;
         switch (action) {
             case 'insert': 
-                console.log('insert', args);
-                controller.createUser(args, function(err, data){
+                console.log('Insert', args);
+                controller.createApplication(args, function(err, data){
                     console.log(err, data);
                     globals.mongoose.disconnect();
                 });
                 break;
             case 'read':
-                controller.readUsers(function(err, data) {
+                controller.readApplications(function(err, data) {
                     console.log(err, data);
                     globals.mongoose.disconnect();
                 });
                 break;
             case 'delete':
-                controller.deleteUser(args.id, function(err) {
+                controller.deleteApplication(args.id, function(err) {
                     if (!err) {
-                        console.log('User deleted');
+                        console.log('Application deleted');
                     } else {
                         console.log(err);
                     }
@@ -46,9 +46,9 @@
             case 'update':
                 var id = args.id;
                 delete args.id;
-                controller.updateUser(id, args, function(err, data){
+                controller.updateApplication(id, args, function(err, data){
                     if (!err) {
-                        console.log('User updated', data);
+                        console.log('Application updated', data);
                     } else {
                         console.log(err);
                     }

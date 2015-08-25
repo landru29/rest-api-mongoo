@@ -1,5 +1,26 @@
 {
     "api": {
+        "application": {
+            "/": {
+                "$GET": {
+                    "role": ["admin"]
+                },
+                "$POST": {
+                    "role": ["admin"]
+                }
+            },
+            "/:id": {
+                "$GET": {
+                    "role": ["admin"]
+                },
+                "$DELETE": {
+                    "role": ["admin"]
+                },
+                "$PUT": {
+                    "role": ["admin"]
+                }
+            }
+        },
         "user": {
             "/": {
                 "$GET": {

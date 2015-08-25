@@ -41,6 +41,7 @@ module.exports = function (server) {
     var models = {};
     var mongoosePlugins = {};
     var helpers = {};
+    var controllers = {};
     var loader = require('./shared/helpers/load.js');
 
     var transporter = _.extend({
@@ -51,6 +52,7 @@ module.exports = function (server) {
         middlewares: middlewares,
         mongoosePlugins: mongoosePlugins,
         models: models,
+        controllers: controllers,
         acl: require('./api/acl.json')
     }, server);
 
@@ -92,6 +94,14 @@ module.exports = function (server) {
         log.info('MODELS: Loading ' + name);
         helpers.mongoosePlugin(schema);
         models[name] = mongoose.model(name, schema);
+    });
+    
+    // LOAD CONTROLLERS
+    // =============================================================================
+    loader(__dirname + '/shared/controllers', /\.controller\.js$/, function (file) {
+        var name = _.camelCase(file.filename.replace(/\..*/, ''));
+        log.info('CONTROLLERS: Loading ' + name);
+        controllers[name] = require(file.fullPathname)(transporter);
     });
 
     return transporter;
