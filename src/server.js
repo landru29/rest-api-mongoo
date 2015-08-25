@@ -57,24 +57,24 @@ var serverApp = function () {
     helpers.loader = loader;
     loader(__dirname + '/shared/helpers', /\.helper\.js$/, function (file) {
         var name = _.camelCase(file.filename.replace(/\..*/, ''));
-        helpers[name] = require(file.fullPathname)(transporter);
         log.info('HELPERS: Loading ' + name);
+        helpers[name] = require(file.fullPathname)(transporter);
     });
 
     // LOAD MIDDLEWARES
     // =============================================================================
     loader(__dirname + '/shared/middlewares', /\.middleware\.js$/, function (file) {
         var name = _.camelCase(file.filename.replace(/\..*/, ''));
-        middlewares[name] = require(file.fullPathname)(transporter);
         log.info('MIDDLEWARES: Loading ' + name);
+        middlewares[name] = require(file.fullPathname)(transporter);
     });
 
     // LOAD MONGOOSE PLUGINS
     // =============================================================================
     loader(__dirname + '/shared/mongoose-plugins', /\.plugin\.js$/, function (file) {
         var name = _.camelCase(file.filename.replace(/\..*/, ''));
-        mongoosePlugins[name] = require(file.fullPathname)(transporter);
         log.info('MONGOOSE PLUGIN: Loading ' + name);
+        mongoosePlugins[name] = require(file.fullPathname)(transporter);
     });
 
 
@@ -90,6 +90,10 @@ var serverApp = function () {
 
     // REGISTER OUR ROUTES
     // =============================================================================
+    app.use(function(req, res, next) {
+        log.info(req.method.toUpperCase(), req.url);
+        next();
+    });
     app.use(middlewares.acl);
     require('./server.route.js')(transporter);
 

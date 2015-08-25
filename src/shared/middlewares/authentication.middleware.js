@@ -4,11 +4,15 @@ module.exports = function (server) {
 
     return function (req, res, next) {
         server.log.info('OAuth middleware in action');
+        if (false === req.acl.authenticated) {
+            server.log.info('  *', 'No authntication required');
+            return next();
+        }
         var accessToken = req.headers['access-token'] || '';
         server.helpers.oauth.decrypt(accessToken, 'access-token', function (err, data) {
             if (!err) {
                 req.user = data;
-                server.log.info(req.acl.role + ' - ' + data.role);
+                server.log.info('  *', 'roles', 'USER:' + req.acl.role + ' - RES:' + data.role);
                 if ((req.acl.role.indexOf('*') !==-1) || (req.acl.role.indexOf(data.role) !==-1)) {
                     return next();
                 } else {

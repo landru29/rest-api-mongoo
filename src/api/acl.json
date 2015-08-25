@@ -22,14 +22,16 @@
             },
             "refresh-token": {
                 "$POST": {
-                    "role": "*"
+                    "role": "*",
+                    "authenticated": false
                 }
             }
         },
         "login": {
             "/": {
                 "$POST": {
-                    "role": "*"
+                    "role": "*",
+                    "authenticated": false
                 }
             }
         }

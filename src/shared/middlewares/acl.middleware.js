@@ -10,22 +10,22 @@ module.exports = function (server) {
     var routes = {};
     
     
-    var readRoute = function(node, baseRoute, collection) {
+    var loadRoute = function(node, baseRoute, collection) {
         for (var subPath in node) {
             if (node.hasOwnProperty(subPath)) {
                 if (!(/^\$/).test(subPath)) {
-                    readRoute(node[subPath], path.join(baseRoute, subPath), collection);
+                    loadRoute(node[subPath], path.join(baseRoute, subPath), collection);
                 } else {
+                    var method = subPath.replace(/^\$/, '').toLowerCase();
+                    server.log.info(' -', 'ACL', baseRoute, method.toUpperCase());
                     if (!collection[baseRoute]) {
                         collection[baseRoute] = {};
                     }
-                    collection[baseRoute][subPath.replace(/^\$/, '').toLowerCase()] = node[subPath];
+                    collection[baseRoute][method] = node[subPath];
                 }
             }
         }
     };
-
-    readRoute(server.acl, '/', routes);
         
     var getAcl = function(resource) {
         for (var route in routes) {
@@ -42,6 +42,9 @@ module.exports = function (server) {
         }
         return false;
     };
+    
+    
+    loadRoute(server.acl, '/', routes);
 
     return function (req, res, next) {
         server.log.info('Acl middleware in action');
@@ -53,6 +56,9 @@ module.exports = function (server) {
         var acl = routeAcl.acl;
         if (!_.isArray(acl.role)) {
             acl.role = [acl.role];
+        }
+        if ('undefined' === typeof acl.authenticated) {
+            acl.authenticated = true;
         }
         server.log.info('  *', 'Allow', acl.role);
         req.acl = acl;

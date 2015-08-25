@@ -3,6 +3,8 @@ module.exports = function(server) {
     var express = require('express'); 
     var router = express.Router();
     var controller = require('./api-user.controller.js')(server);
+    
+    router.use('/refresh-token', require('./refresh-token/api-user-refresh-token.route.js')(server));
 
     router.get('/', function (req, res) {
         controller.readUsers(function(err, data) {
