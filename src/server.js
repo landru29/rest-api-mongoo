@@ -1,11 +1,11 @@
 /*global module, require, process */
 
-var serverApp = function () {
+module.exports = function (options) {
     'use strict';
     var express = require('express'); // call express
     var app = express(); // define our app using express
     var bodyParser = require('body-parser');
-    var mongoose = require('mongoose');
+    var _ = require('lodash');
 
 
     // CONFIGURE THE SERVER
@@ -15,11 +15,16 @@ var serverApp = function () {
     }));
     app.use(bodyParser.json());
 
-    var globals = require('./global-loader.js')({
-        app: app
-    });
+    var globals = require('./global-loader.js')(
+        _.extend(
+            {
+                app: app
+            },
+            options
+        )
+    );
 
-    var port = process.env.PORT || globals.config.server.port;
+    var port = options.port || process.env.PORT;
     
     // REGISTER OUR ROUTES
     // =============================================================================
@@ -35,6 +40,3 @@ var serverApp = function () {
     app.listen(port);
     globals.log.info('Server is listening on port ' + port);
 };
-
-serverApp();
-module.exports = serverApp;

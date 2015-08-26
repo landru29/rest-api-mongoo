@@ -3,7 +3,7 @@
     "description": "simple crud",
     "main": "src/server.js",
     "scripts": {
-        "start": "node src/server.js | bunyan"
+        "start": "node src/launcher.js | bunyan"
     },
     "dependencies": {
         "express": "4.13.3",

@@ -18,5 +18,13 @@
             "secret": "my access token refresh",
             "expire-in-minutes": 30
         }
+    },
+    "launcher": {
+        "./server.js": {
+            "nb-forks": 2,
+            "options": {
+                "port": 8080
+            }
+        }
     }
 }

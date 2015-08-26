@@ -8,7 +8,7 @@ module.exports = function (server) {
     var packageJson = require('../package.json');
     var mongoose = require('mongoose');
 
-    var log = bunyan.createLogger({
+    var log = server.log ? server.log : bunyan.createLogger({
         name: packageJson.name
     });
 
