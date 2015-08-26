@@ -1,5 +1,9 @@
 {
     "api": {
+        "$GET": {
+            "role": "*",
+            "authenticated": false
+        },
         "application": {
             "/": {
                 "$GET": {

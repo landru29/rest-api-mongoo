@@ -28,6 +28,7 @@ module.exports = function (options) {
     
     // REGISTER OUR ROUTES
     // =============================================================================
+    app.use(globals.middlewares.cors);
     app.use(function(req, res, next) {
         globals.log.info(req.method.toUpperCase(), req.url);
         next();

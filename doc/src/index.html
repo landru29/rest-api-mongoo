@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>API Documentation</title>
+        <base href="/">
+        
+        <!-- build:css styles/styles.min.css -->
+        <link rel="stylesheet" href="styles/style.css">
+        <!-- endbuild -->
+        
+        
+        
+        <!-- build:css(.) styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+        
+    </head>
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none;
+        }
+    </style>
+    <body>
+        <a id="top"></a>
+        <div class="app-frame">
+            <div class="main-frame" ng-app="Documentation">
+                <div class="view-container" ui-view>
+                </div>
+            </div>
+        </div>
+        
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+        
+    <script src="scripts/config.js"></script>
+    
+    <!-- build:js scripts/app.min.js -->    
+    <script type="text/javascript" src="scripts/app.js"> </script>
+    <script type="text/javascript" src="scripts/route.js"> </script>
+    <script type="text/javascript" src="scripts/controllers/main.controller.js"> </script>
+    <script type="text/javascript" src="scripts/services/conf-loader.service.js"></script>
+    <!-- endbuild -->
+    </body>
+</html>
