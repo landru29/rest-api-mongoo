@@ -53,7 +53,7 @@ module.exports = function (grunt) {
 
         watch: { // watch files, trigger actions and perform livereload
             dev: {
-                files: ['<%= project.app%>/index.html', '<%= project.app%>/scripts/**/*.js', '<%= project.app%>/styles/**/*', '<%= project.app%>/views/**'],
+                files: ['<%= project.app%>/index.html', '<%= project.app%>/scripts/**/*.js', '<%= project.app%>/**/*.less', '<%= project.app%>/views/**'],
                 tasks: [
                     'less:dev',
                     'copy:dev',
@@ -200,7 +200,7 @@ module.exports = function (grunt) {
               paths: ["<%= project.dist%>/styles"]
             },
             files: {
-              "style.css": "<%= project.app%>/**/*.less"
+              "<%= project.build%>/styles/style.css": "<%= project.app%>/**/*.less"
             }
           }
         },
