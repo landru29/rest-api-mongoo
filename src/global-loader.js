@@ -68,10 +68,10 @@ module.exports = function (server) {
         if ('string' !== typeof node) {
             for (var subPath in node) {
                 if (node.hasOwnProperty(subPath)) {
-                    if (!(/^\$/).test(subPath)) {
+                    if (!(/^@/).test(subPath)) {
                         loadRoute(node[subPath], path.join(baseRoute, subPath), collection);
                     } else {
-                        var method = subPath.replace(/^\$/, '').toLowerCase();
+                        var method = subPath.replace(/^@/, '').toLowerCase();
                         log.info('   *', 'META', baseRoute, method.toUpperCase());
                         if (!collection[baseRoute]) {
                             collection[baseRoute] = {};

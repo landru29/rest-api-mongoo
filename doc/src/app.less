@@ -1,4 +1,5 @@
 @header-color:  #888888;
+@endpoint-color: #123456;
 
 
 
@@ -11,4 +12,33 @@ div.header {
         font-size: 2em;
         color: @header-color;
     }
+}
+
+ul.endpoint-sublist {
+    padding: 0 0 0 5px;
+    .endpoint-title {
+        color: @endpoint-color;
+        font-size: 1.5em;    
+    }
+}
+
+span.method {
+    color: white;
+    font-weight: bold;
+}
+
+span.method-GET {
+    background-color: blue;
+}
+
+span.method-POST {
+    background-color: orange;
+}
+
+span.method-DELETE {
+    background-color: red;
+}
+
+span.method-put {
+    background-color: darkviolet;
 }

@@ -55,7 +55,7 @@
 
         // relaunch process if dying
         cluster.on('exit', function (worker) {
-            log.warn('Worker ' + worker.process.pid + ' died :(');
+            log.fatal('Worker ' + worker.process.pid + ' died :(', signal);
             checkForRelaunch(apiProcessList, worker);
         });
 

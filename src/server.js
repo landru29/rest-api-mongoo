@@ -16,8 +16,7 @@ module.exports = function (options) {
     app.use(bodyParser.json());
 
     var globals = require('./global-loader.js')(
-        _.extend(
-            {
+        _.extend({
                 app: app
             },
             options
@@ -25,11 +24,11 @@ module.exports = function (options) {
     );
 
     var port = options.port || process.env.PORT;
-    
+
     // REGISTER OUR ROUTES
     // =============================================================================
     app.use(globals.middlewares.cors);
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         globals.log.info(req.method.toUpperCase(), req.url);
         next();
     });
@@ -39,7 +38,14 @@ module.exports = function (options) {
     // START THE SERVER
     // =============================================================================
     globals.log.info('Launching server');
-    app.listen(port, function() {
-        globals.log.info('Server is listening on port ' + port);
-    });
+
+    try {
+        app.listen(port, function () {
+            globals.log.info('Server is listening on port ' + port);
+        });
+    } catch (err) {
+        globals.log.fatal('Port ' + port + ' is not free for use');
+        throw err;
+    }
+
 };

@@ -2,7 +2,7 @@
     "version": "1.0.0",
     "endpoints": {
         "api": {
-            "$GET": {
+            "@GET": {
                 "acl": {
                     "role": "*",
                     "authenticated": false
@@ -10,14 +10,14 @@
             },
             "application": {
                 "/": {
-                    "$GET": {
+                    "@GET": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$POST": {
+                    "@POST": {
                         "acl": {
                             "role": [
                                 "admin"
@@ -26,21 +26,21 @@
                     }
                 },
                 "/:id": {
-                    "$GET": {
+                    "@GET": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$DELETE": {
+                    "@DELETE": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$PUT": {
+                    "@PUT": {
                         "acl": {
                             "role": [
                                 "admin"
@@ -51,14 +51,14 @@
             },
             "user": {
                 "/": {
-                    "$GET": {
+                    "@GET": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$POST": {
+                    "@POST": {
                         "acl": {
                             "role": [
                                 "admin"
@@ -67,21 +67,21 @@
                     }
                 },
                 "/:id": {
-                    "$GET": {
+                    "@GET": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$DELETE": {
+                    "@DELETE": {
                         "acl": {
                             "role": [
                                 "admin"
                             ]
                         }
                     },
-                    "$PUT": {
+                    "@PUT": {
                         "acl": {
                             "role": [
                                 "admin"
@@ -90,7 +90,7 @@
                     }
                 },
                 "refresh-token": {
-                    "$POST": {
+                    "@POST": {
                         "acl": {
                             "role": "*",
                             "authenticated": false
@@ -100,7 +100,7 @@
             },
             "login": {
                 "/": {
-                    "$POST": {
+                    "@POST": {
                         "acl": {
                             "role": "*",
                             "authenticated": false
