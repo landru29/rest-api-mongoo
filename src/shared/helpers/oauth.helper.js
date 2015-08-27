@@ -20,7 +20,7 @@ module.exports = function (server) {
          * Encrypt data
          * @param   {Object} data          Data to encrypt
          * @param   {String} encryptorName Name of the encryptor specfied in authentication.json
-         * @param   {function}             Callback function (optional)
+         * @param   {function} callback    Callback function (optional)
          * @returns {String} encrypted data
          */
         encrypt: function (data, encryptorName, callback) {
@@ -39,7 +39,7 @@ module.exports = function (server) {
          * Async decrypt data
          * @param   {Object} data          Data to decrypt
          * @param   {String} encryptorName Name of the encryptor specfied in authentication.json
-         * @param   {function}             Callback function
+         * @param   {function} callback    Callback function
          * @returns {Object} decrypted data
          */
         decrypt: function (data, encryptorName, callback) {

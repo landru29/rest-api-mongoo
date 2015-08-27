@@ -7,7 +7,6 @@
     },
     "dependencies": {
         "express": "4.13.3",
-        "acl": "0.4.8",
         "mongoose": "4.1.2",
         "mongoose-type-email": "1.0.0",
         "body-parser": "1.13.3",

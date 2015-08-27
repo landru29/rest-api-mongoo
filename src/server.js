@@ -38,6 +38,8 @@ module.exports = function (options) {
 
     // START THE SERVER
     // =============================================================================
-    app.listen(port);
-    globals.log.info('Server is listening on port ' + port);
+    globals.log.info('Launching server');
+    app.listen(port, function() {
+        globals.log.info('Server is listening on port ' + port);
+    });
 };

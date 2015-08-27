@@ -1,8 +1,8 @@
 /*global module, require*/
 module.exports = function (folder, pattern, callback, end) {
     'use strict';
-    var fs = require("fs");
-    var path = require("path");
+    var fs = require('fs');
+    var path = require('path');
 
     var fileList = fs.readdirSync(folder);
     var result = [];

@@ -7,6 +7,7 @@ module.exports = function (server) {
     var bunyan = require('bunyan');
     var packageJson = require('../package.json');
     var mongoose = require('mongoose');
+    var path = require('path');
 
     var log = server.log ? server.log : bunyan.createLogger({
         name: packageJson.name
@@ -43,6 +44,7 @@ module.exports = function (server) {
     var helpers = {};
     var controllers = {};
     var loader = require('./shared/helpers/load.js');
+    var routes = {};
 
     var transporter = _.extend({
         config: configuration,
@@ -53,11 +55,35 @@ module.exports = function (server) {
         mongoosePlugins: mongoosePlugins,
         models: models,
         controllers: controllers,
-        acl: require('./api/acl.json')
+        meta: {
+            routes: routes
+        }
     }, server);
 
 
+    // LOAD API META
+    // =============================================================================
 
+    var loadRoute = function(node, baseRoute, collection) {
+        if ('string' !== typeof node) {
+            for (var subPath in node) {
+                if (node.hasOwnProperty(subPath)) {
+                    if (!(/^\$/).test(subPath)) {
+                        loadRoute(node[subPath], path.join(baseRoute, subPath), collection);
+                    } else {
+                        var method = subPath.replace(/^\$/, '').toLowerCase();
+                        log.info('   *', 'META', baseRoute, method.toUpperCase());
+                        if (!collection[baseRoute]) {
+                            collection[baseRoute] = {};
+                        }
+                        collection[baseRoute][method] = node[subPath];
+                    }
+                }
+            }
+        }
+    };
+
+    loadRoute(require('./api/api.json').endpoints, '/', routes);
 
     // LOAD HELPERS
     // =============================================================================
