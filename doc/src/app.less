@@ -1,5 +1,12 @@
+@import "elements.less";
+
 @header-color:  #888888;
 @endpoint-color: #123456;
+
+@get-color: blue;
+@post-color: orange;
+@put-color: darkviolet;
+@delete-color: red;
 
 
 
@@ -22,23 +29,50 @@ ul.endpoint-sublist {
     }
 }
 
-span.method {
-    color: white;
-    font-weight: bold;
-}
 
-span.method-GET {
-    background-color: blue;
-}
+section.endpoint{
+    margin: 2px 0 2px 0;
+    dl {
+        margin: 2px 0 2px 0;
+    }
+    span.method {
+        color: white;
+        font-weight: bold;
+        padding: 2px 0px 2px 0px;
+        width: 50px;
+        display: inline-block;
+        text-align: center;
+        .rounded(3px);
+    }
+    .method-get {
+        cursor: pointer;
+        span.method {
+            background-color: @get-color;
+        }
+        background-color: lighten(@get-color, 30%);
+    }
 
-span.method-POST {
-    background-color: orange;
-}
+    .method-post {
+        cursor: pointer;
+        span.method {
+            background-color: @post-color;
+        }
+        background-color: lighten(@post-color, 30%);
+    }
 
-span.method-DELETE {
-    background-color: red;
-}
+    .method-delete {
+        cursor: pointer;
+        span.method {
+            background-color: @delete-color;
+        }
+        background-color: lighten(@delete-color, 30%);
+    }
 
-span.method-put {
-    background-color: darkviolet;
+    .method-put {
+        cursor: pointer;
+        span.method {
+            background-color: @put-color;
+        }
+        background-color: lighten(@put-color, 30%);
+    }
 }

@@ -6,6 +6,9 @@
                 "acl": {
                     "role": "*",
                     "authenticated": false
+                },
+                "description": "Get the API description",
+                "parameters":{
                 }
             },
             "application": {
@@ -15,6 +18,9 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Read all applications",
+                        "parameters":{
                         }
                     },
                     "@POST": {
@@ -22,6 +28,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Create an application",
+                        "parameters":{
+                            "name": {
+                                "type": "String",
+                                "mendatory": true,
+                                "where": "body"
+                            }
                         }
                     }
                 },
@@ -31,6 +45,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Read an application",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            }
                         }
                     },
                     "@DELETE": {
@@ -38,6 +60,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "delete an application",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            }
                         }
                     },
                     "@PUT": {
@@ -45,6 +75,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Update an application",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            }
                         }
                     }
                 }
@@ -56,6 +94,9 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Read all users",
+                        "parameters":{
                         }
                     },
                     "@POST": {
@@ -63,6 +104,23 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Create a user",
+                        "parameters":{
+                            "name": {
+                                "type":"String",
+                                "where": "body"
+                            },
+                            "email": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "body"
+                            },
+                            "password": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "body"
+                            }
                         }
                     }
                 },
@@ -72,6 +130,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Read a user",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            }
                         }
                     },
                     "@DELETE": {
@@ -79,6 +145,14 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Delete a user",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            }
                         }
                     },
                     "@PUT": {
@@ -86,6 +160,26 @@
                             "role": [
                                 "admin"
                             ]
+                        },
+                        "description": "Update a user",
+                        "parameters":{
+                            "id": {
+                                "type":"String",
+                                "mendatory": true,
+                                "where": "url"
+                            },
+                            "name": {
+                                "type":"String",
+                                "where": "body"
+                            },
+                            "email": {
+                                "type":"String",
+                                "where": "body"
+                            },
+                            "password": {
+                                "type":"String",
+                                "where": "body"
+                            }
                         }
                     }
                 },
@@ -94,6 +188,14 @@
                         "acl": {
                             "role": "*",
                             "authenticated": false
+                        },
+                        "description": "Refresh an OAuth2 token",
+                        "parameters":{
+                             "refresh-token": {
+                                "type": "String",
+                                "mendatory": true,
+                                "where": "body"
+                            }
                         }
                     }
                 }
@@ -104,6 +206,19 @@
                         "acl": {
                             "role": "*",
                             "authenticated": false
+                        },
+                        "description": "Login a user",
+                        "parameters":{
+                            "email": {
+                                "type": "String",
+                                "mendatory": true,
+                                "where": "body"
+                            },
+                            "password": {
+                                "type": "String",
+                                "mendatory": true,
+                                "where": "body"
+                            }
                         }
                     }
                 }

@@ -2,6 +2,41 @@
     <div class="col-md-1">
     </div>
     <div class="col-md-10">
-        <div endpoint-list="{root:'', endP:Main.endpoints}"></div>
+        <ul class="list-unstyled">
+            <li data-ng-repeat="(route, methods) in Main.endpoints">
+                <ul class="list-unstyled">
+                    <li data-ng-repeat="(method,metadata) in methods">
+                        <section class="endpoint">
+                            <div class="row method-{{method}}" data-ng-click="metadata.visible = !metadata.visible">
+                                <div class="col-md-1">
+                                    <span class="method">{{method}}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    {{route}}
+                                </div>
+                                <div class="col-md-5">
+                                    {{metadata.description}}
+                                </div>
+                            </div>
+                            <div data-ng-show="metadata.visible">
+                                <dl class="dl-horizontal">
+                                    <dt ng-repeat-start="(parameter, description) in metadata.parameters">{{parameter}}</dt>
+                                    <dd ng-repeat-end><input type="text" data-ng-model="description.value"></dd>
+                                </dl>
+                                <button class="btn btn-primary" data-ng-click="Main.request(route, method, metadata)">Test</button>
+                                <div class="result">
+                                    <div class="success" data-ng-show="metadata.result.success">
+                                        <pre>{{metadata.result.success | json}}</pre>
+                                    </div>
+                                    <div class="error" data-ng-show="metadata.result.error">
+                                        <pre>{{metadata.result.error | json}}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>

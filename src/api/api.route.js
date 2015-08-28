@@ -3,8 +3,8 @@ module.exports = function (server) {
     var express = require('express');
     var router = express.Router();
     
-    router.use('/', function(req, res) {
-        res.status(200).json(require('./api.json'));
+    router.get('/', function(req, res) {
+        res.status(200).json(server.meta);
     });
     
     router.use('/login', require('./login/api-login.route.js')(server));
