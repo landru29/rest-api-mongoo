@@ -54,14 +54,12 @@ angular.module('Documentation').controller('MainCtrl', function($scope, ConfLoad
             success: ''
         };
         
-        $http(req).then(
+        $http(req).success(
             function(data){
-                metadata.result.success = data.data;
-            }, 
-            function(err){
-                metadata.result.error = err.data;
-            }
-        );
+                metadata.result.success = data;
+            }).error(function(err, status){
+                metadata.result.error = err;
+            });
     };
     
     this.init();

@@ -5,8 +5,8 @@
         <title>API Documentation</title>
         <base href="/">
         
-        <!-- build:css styles/styles.min.css -->
-        <link rel="stylesheet" href="styles/style.css">
+        <!-- build:css(.) styles/styles.min.css -->
+        <link rel="stylesheet" href="build/styles/style.css">
         <!-- endbuild -->
         
         
@@ -14,6 +14,7 @@
         <!-- build:css(.) styles/vendor.css -->
         <!-- bower:css -->
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="bower_components/angular-flash-alert/dist/angular-flash.css" />
         <!-- endbower -->
         <!-- endbuild -->
         
@@ -27,9 +28,20 @@
         <a id="top"></a>
         <div class="app-frame">
             <div class="main-frame" ng-app="Documentation">
-                <div class="header">
+                <div class="header" data-ng-controller="HeaderCtrl as Header">
+                    <button data-ng-hide="Header.isLoggedIn"
+                            data-ng-click="Header.openLoginDialog()"
+                            class="btn btn-link pull-left">
+                        Login
+                    </button>
+                    <button data-ng-show="Header.isLoggedIn"
+                            data-ng-click="Header.logout()"
+                            class="btn btn-link pull-left">
+                        Logout
+                    </button>
                     <h1>API Documentation</h1>
                 </div>
+                <div flash-message="5000" ></div> 
                 <div class="container-fluid" ui-view>
                 </div>
             </div>
@@ -45,6 +57,7 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/ngstorage/ngStorage.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-flash-alert/dist/angular-flash.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
         
@@ -53,8 +66,12 @@
     <!-- build:js scripts/app.min.js -->    
     <script type="text/javascript" src="scripts/app.js"> </script>
     <script type="text/javascript" src="scripts/route.js"> </script>
+    <script type="text/javascript" src="scripts/controllers/header.controller.js"> </script>
     <script type="text/javascript" src="scripts/controllers/main.controller.js"> </script>
     <script type="text/javascript" src="scripts/services/conf-loader.service.js"></script>
+    <script type="text/javascript" src="scripts/services/login.service.js"></script>
+    <script type="text/javascript" src="scripts/services/oauth.service.js"></script>
+    <script type="text/javascript" src="scripts/services/oauth.interceptor.js"></script>
     <!-- endbuild -->
     </body>
 </html>

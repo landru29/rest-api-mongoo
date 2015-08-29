@@ -136,7 +136,7 @@ module.exports = function (grunt) {
         },
         
         ngtemplates: {
-            dist: {
+            Documentation: {
                 cwd: '<%= project.app%>',
                 src: 'views/**/*.html',
                 dest: '<%= project.build%>/template.js',
@@ -165,14 +165,14 @@ module.exports = function (grunt) {
         },
 
         cssmin: {
-            dist: {
+            /*dist: {
                 files: [
                     {
                         dest: '<%= project.dist%>/styles/styles.min.css',
                         src: ['<%= project.app%>/styles/*.css', '<%= project.build%>/styles/*.css']
                     }
                 ]
-            }
+            }*/
         },
 
         clean: { // erase all files in dist and build folder
@@ -326,7 +326,7 @@ module.exports = function (grunt) {
         'wiredep',
         'ngconstant',
         'useminPrepare',
-        'ngtemplates:dist',
+        'ngtemplates',
         'concat:generated',
         'ngAnnotate',
         'less:dev',
