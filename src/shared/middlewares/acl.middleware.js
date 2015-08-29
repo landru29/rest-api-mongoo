@@ -11,7 +11,7 @@ module.exports = function (server) {
         for (var route in routes) {
             if (routes.hasOwnProperty(route)) {
                 var thisRouteMeta = routes[route];
-                if ((pathToRegexp(route).test(resource.url)) && (thisRouteMeta[resource.method])) {
+                if ((pathToRegexp(route[0] !=='/' ? '/' + route : route).test(resource.url)) && (thisRouteMeta[resource.method])) {
                     return {
                         acl: thisRouteMeta[resource.method].acl,
                         route: route,

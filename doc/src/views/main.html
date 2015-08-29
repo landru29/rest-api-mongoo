@@ -20,8 +20,14 @@
                             </div>
                             <div data-ng-show="metadata.visible">
                                 <dl class="dl-horizontal">
-                                    <dt ng-repeat-start="(parameter, description) in metadata.parameters">{{parameter}}</dt>
-                                    <dd ng-repeat-end><input type="text" data-ng-model="description.value"></dd>
+                                    <dt ng-repeat-start="(parameter, description) in metadata.parameters">
+                                        {{parameter}}
+                                    </dt>
+                                    <dd ng-repeat-end>
+                                        <input type="text" data-ng-model="description.value">
+                                        <em>{{description.type}}</em>
+                                        <span class="description">({{description.description}})</span>
+                                    </dd>
                                 </dl>
                                 <button class="btn btn-primary" data-ng-click="Main.request(route, method, metadata)">Test</button>
                                 <div class="result">

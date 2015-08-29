@@ -17,7 +17,8 @@ module.exports = function (options) {
 
     var globals = require('./global-loader.js')(
         _.extend({
-                app: app
+                app: app,
+                metaScanFile: __filename
             },
             options
         )
@@ -33,6 +34,10 @@ module.exports = function (options) {
         next();
     });
     app.use(globals.middlewares.acl);
+    
+    /**
+     * @followRoute ./server.route.js
+     */
     require('./server.route.js')(globals);
 
     // START THE SERVER

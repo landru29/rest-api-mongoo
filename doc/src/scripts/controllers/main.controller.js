@@ -38,8 +38,8 @@ angular.module('Documentation').controller('MainCtrl', function($scope, ConfLoad
             rest.push(encodeURIComponent(key) + '=' + encodeURIComponent(thisParams[key]));
         }
         uri += rest.length ? '?' + rest.join('&') : '';
-        return appConfiguration.url + uri.replace(/^\/api\//, '');
-    }
+        return appConfiguration.url + uri.replace(/^\/?api\//, '');
+    };
     
     this.request = function(route, method, metadata) {
         var params = self.parseParameters(metadata.parameters);

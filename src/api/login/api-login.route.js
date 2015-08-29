@@ -4,7 +4,15 @@ module.exports = function(server) {
     var router = express.Router();
     var controller = server.controllers.user;
 
-    
+    /**
+     * Login a user
+     * @name /
+     * @method POST
+     * @role -
+     * @param {String} email    @body @mendatory User email
+     * @param {String} password @body @mendatory User password
+     * @public
+     */
     router.post('/', function(req, res) {
         var checker = server.helpers.mendatoryFieldsError(req.body, {
             email: true,

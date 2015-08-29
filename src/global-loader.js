@@ -1,5 +1,4 @@
 /*global module, require */
-
 module.exports = function (server) {
     'use strict';
     var configuration = require('./config.json');
@@ -83,7 +82,14 @@ module.exports = function (server) {
         }
     };
 
-    loadRoute(require('./api/api.json').endpoints, '/', routes);
+    var scanPath = path.parse(server.metaScanFile ? server.metaScanFile : './api/api.json');
+    if (scanPath.ext === '.json') {
+        log.info('Getting meta from JSON');
+        loadRoute(require('./api/api.json').endpoints, '/', routes);
+    } else {
+        log.info('Getting meta from source code');
+        transporter.meta = {routes:require('./meta-loader')(transporter)};
+    }
 
     // LOAD HELPERS
     // =============================================================================
