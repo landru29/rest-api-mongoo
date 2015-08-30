@@ -25,7 +25,7 @@ angular.module('Documentation').controller('MainCtrl', function($scope, ConfLoad
     this.buildUrl = function(route, params) {
         var thisParams = JSON.parse(JSON.stringify(params ? params : {}));
         var uri = route.replace(/:(\w*)/g, function(replacement, key){
-            if (thisParams[key]) {
+            if ('undefined' !== typeof thisParams[key]) {
                 var value = thisParams[key];
                 delete thisParams[key];
                 return value;

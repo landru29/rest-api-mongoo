@@ -15,7 +15,7 @@ module.exports = function (server) {
     var UserSchema   = new Schema({
         name: {
             type: String,
-            required: 'Name is required'
+            required: false
         },
         email: {
             type: String,

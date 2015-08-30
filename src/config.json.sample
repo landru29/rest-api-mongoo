@@ -6,6 +6,10 @@
             "name": "test"
         }
     },
+    "server": {
+        "protocole": "http",
+        "port": 8080
+    },
     "oauth": {
         "refresh-token": {
             "secret": "my refresh token secret",

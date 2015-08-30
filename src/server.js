@@ -34,6 +34,7 @@ module.exports = function (options) {
         next();
     });
     app.use(globals.middlewares.acl);
+    app.use(globals.middlewares.requiredFields);
     
     /**
      * @followRoute ./server.route.js

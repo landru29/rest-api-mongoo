@@ -6,6 +6,10 @@ module.exports = function (grunt) {
 
     // Load Grunt tasks declared in the package.json file
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+    
+    var configDev = grunt.file.readJSON('src/config.json');
+    var apiConfig = grunt.file.readJSON('../src/config.json');
+    configDev.url = apiConfig.server.protocole + '://localhost:' + apiConfig.server.port + '/api/';
 
     // Configure Grunt
     grunt.initConfig({
@@ -275,8 +279,16 @@ module.exports = function (grunt) {
             options: {
                 name: 'doc.config',
                 dest: '<%= project.build%>/scripts/config.js',
+                
+            },
+            dist: {
                 constants: {
                     appConfiguration: grunt.file.readJSON('src/config.json')
+                }
+            },
+            dev: {
+                constants: {
+                    appConfiguration: configDev
                 }
             },
             build: {}
@@ -301,7 +313,7 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', [
         'clean:dev',
         'wiredep',
-        'ngconstant',
+        'ngconstant:dev',
         'less:dev',
         'copy:dev',
         'express:dev',
@@ -324,7 +336,7 @@ module.exports = function (grunt) {
     grunt.registerTask('prod', [
         'clean:dist',
         'wiredep',
-        'ngconstant',
+        'ngconstant:dist',
         'useminPrepare',
         'ngtemplates',
         'concat:generated',

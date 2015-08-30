@@ -10,7 +10,7 @@ module.exports = function(server) {
      * @name /
      * @method POST
      * @role -
-     * @param {String} refresh-token @body @mendatory Refresh token
+     * @param {String} refresh-token @body @required Refresh token
      */
     router.post('/', function (req, res) {
         controller.generateAccessToken(req.body['refresh-token'], function(err, data) {

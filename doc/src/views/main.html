@@ -24,6 +24,7 @@
                                         {{parameter}}
                                     </dt>
                                     <dd ng-repeat-end>
+                                        <span class="required" data-ng-if="description.required">*</span>
                                         <input type="text" data-ng-model="description.value">
                                         <em>{{description.type}}</em>
                                         <span class="description">({{description.description}})</span>

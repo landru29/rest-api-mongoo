@@ -49,7 +49,12 @@ module.exports = function (server) {
         }
         user.save(function(err, createdUser) {
             if (!err) {
-                callback(null, {'refresh-token': generateRefreshToken(createdUser)});
+                callback(null, _.extend(
+                    {
+                        'refresh-token': generateRefreshToken(createdUser)
+                    },
+                    createdUser._doc
+                ));
             } else {
                  callback(err);
             }

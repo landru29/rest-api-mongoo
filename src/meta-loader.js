@@ -81,8 +81,8 @@ module.exports = function (server) {
                 switch (str.trim()) {
                     case '':
                         break;
-                    case 'mendatory':
-                        result.mendatory = true;
+                    case 'required':
+                        result.required = true;
                         break;
                     case 'body':
                         result.where = 'body';

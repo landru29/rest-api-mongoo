@@ -33,7 +33,7 @@
                         "parameters":{
                             "name": {
                                 "type": "String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             }
                         }
@@ -50,7 +50,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             }
                         }
@@ -65,7 +65,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             }
                         }
@@ -80,7 +80,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             }
                         }
@@ -113,12 +113,12 @@
                             },
                             "email": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             },
                             "password": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             }
                         }
@@ -135,7 +135,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             }
                         }
@@ -150,7 +150,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             }
                         }
@@ -165,7 +165,7 @@
                         "parameters":{
                             "id": {
                                 "type":"String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "url"
                             },
                             "name": {
@@ -193,7 +193,7 @@
                         "parameters":{
                              "refresh-token": {
                                 "type": "String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             }
                         }
@@ -211,12 +211,12 @@
                         "parameters":{
                             "email": {
                                 "type": "String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             },
                             "password": {
                                 "type": "String",
-                                "mendatory": true,
+                                "required": true,
                                 "where": "body"
                             }
                         }

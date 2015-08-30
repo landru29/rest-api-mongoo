@@ -21,7 +21,7 @@ module.exports = function(server) {
      * Read one application
      * @name /:id
      * @method GET
-     * @param {String} id @url @mendatory Application ID
+     * @param {String} id @url @required Application ID
      * @role admin
      */
     router.get('/:id', function(req, res) {
@@ -33,27 +33,20 @@ module.exports = function(server) {
     /** Create an application
      * @name /
      * @method POST
-     * @param {String} name     @body @mendatory Application name
+     * @param {String} name     @body @required Application name
      * @role admin
      */
     router.post('/', function(req, res) {
-        var checker = server.helpers.mendatoryFieldsError(req.body, {
-            name: /^[\w\s]*$/
+        controller.createApplication(req.body, function(err, data) {
+            server.helpers.response(req, res, err, data, {message: {success: 'Application created'}});
         });
-        if (!checker) {
-            controller.createApplication(req.body, function(err, data) {
-                server.helpers.response(req, res, err, data, {message: {success: 'Application created'}});
-            });
-        } else {
-             server.helpers.response(req, res, checker, null);
-        }
     });
     
     /**
      * Delete an application
      * @name /:id
      * @method DELETE
-     * @param {String} id @url @mendatory Application ID
+     * @param {String} id @url @required Application ID
      * @role admin
      */
     router.delete('/:id', function (req, res) {
@@ -66,7 +59,7 @@ module.exports = function(server) {
      * Update an application
      * @name /:id
      * @method PUT
-     * @param {String} id       @url  @mendatory Application ID
+     * @param {String} id       @url  @required Application ID
      * @param {String} name     @body            Application name
      * @role admin
      */

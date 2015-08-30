@@ -27,7 +27,7 @@ module.exports = function(server) {
      * Read one user
      * @name /:id
      * @method GET
-     * @param {String} id @url @mendatory User ID
+     * @param {String} id @url @required User ID
      * @role admin
      */
     router.get('/:id', function(req, res) {
@@ -41,30 +41,21 @@ module.exports = function(server) {
      * @name /
      * @method POST
      * @param {String} name     @body            User name
-     * @param {String} email    @body @mendatory User email
-     * @param {String} password @body @mendatory User password
+     * @param {String} email    @body @required User email
+     * @param {String} password @body @required User password
      * @role admin
      */
     router.post('/', function(req, res) {
-        var checker = server.helpers.mendatoryFieldsError(req.body, {
-            name: /^[\w\s]*$/,
-            email: true,
-            password: true
+        controller.createUser(req.body, function(err, data) {
+            server.helpers.response(req, res, err, data, {message: {success: 'User created'}});
         });
-        if (!checker) {
-            controller.createUser(req.body, function(err, data) {
-                server.helpers.response(req, res, err, data, {message: {success: 'User created'}});
-            });
-        } else {
-             server.helpers.response(req, res, checker, null);
-        }
     });
     
     /**
      * Delete a user
      * @name /:id
      * @method DELETE
-     * @param {String} id @url @mendatory User ID
+     * @param {String} id @url @required User ID
      * @role admin
      */
     router.delete('/:id', function (req, res) {
@@ -77,7 +68,7 @@ module.exports = function(server) {
      * Update a user
      * @name /:id
      * @method PUT
-     * @param {String} id       @url  @mendatory User ID
+     * @param {String} id       @url  @required User ID
      * @param {String} name     @body            User name
      * @param {String} email    @body            User email
      * @param {String} password @body            User password

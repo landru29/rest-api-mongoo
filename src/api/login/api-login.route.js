@@ -9,22 +9,14 @@ module.exports = function(server) {
      * @name /
      * @method POST
      * @role -
-     * @param {String} email    @body @mendatory User email
-     * @param {String} password @body @mendatory User password
+     * @param {String} email    @body @required User email
+     * @param {String} password @body @required User password
      * @public
      */
     router.post('/', function(req, res) {
-        var checker = server.helpers.mendatoryFieldsError(req.body, {
-            email: true,
-            password: true
+        controller.checkUser(req.body.email, req.body.password, function(err, data) {
+            server.helpers.response(req, res, err, data);
         });
-        if (!checker) {
-            controller.checkUser(req.body.email, req.body.password, function(err, data) {
-                server.helpers.response(req, res, err, data);
-            });
-        } else {
-             server.helpers.response(req, res, checker, null);
-        }
     });
     
     return router;
