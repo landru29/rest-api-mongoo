@@ -67,7 +67,7 @@ module.exports = function (server) {
             var matcher = param.match(/^\{(\w*)\}\s*(\w*)\s*((?:@(?:\w*)\s*)*)(.*)$/);
            
             var type = matcher[1];
-            var name = matcher[2]
+            var name = matcher[2];
             var tags = matcher[3];
             var description = matcher[4];
             
@@ -102,7 +102,7 @@ module.exports = function (server) {
             if (other.length) {
                 result.tags = other;
             }
-            var desc={}
+            var desc={};
             desc[name] = result;
             return desc;
         });
@@ -189,7 +189,7 @@ module.exports = function (server) {
                 }
             });
         }
-    }
+    };
 
     if (server.metaScanFile) {
         processFile('', endpoints, server.metaScanFile, true);

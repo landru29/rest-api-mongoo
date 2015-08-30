@@ -122,7 +122,9 @@ module.exports = function (server) {
                         },
                         function (err) {
                             reject(err);
-                            callback && callback(err);
+                            if (callback) {
+                                callback(err);
+                            }
                         });
                 } else {
                     user.save(callback).then(function (data) {

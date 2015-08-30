@@ -134,8 +134,8 @@ module.exports = function (server) {
             schemas[name].postLoad();
         }
     }
-    for(var name in schemas) {
-        models[name] = mongoose.model(name, schemas[name].schema);
+    for(var schName in schemas) {
+        models[schName] = mongoose.model(schName, schemas[schName].schema);
     }
     
     // LOAD CONTROLLERS

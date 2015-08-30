@@ -9,10 +9,10 @@ module.exports = function (server) {
             var error = false;
             var parameters = routeDesc.descriptor.parameters;
             var keyError;
-            var params = routeDesc.params
+            var params = routeDesc.params;
             for (var key in parameters) {
                 if ((parameters.hasOwnProperty(key)) && (parameters[key].required)) {
-                    var thisParameter = parameters[key]
+                    var thisParameter = parameters[key];
                     switch (thisParameter.where) {
                     case 'body':
                         if (!req.body[key]) {

@@ -1,10 +1,10 @@
 /*global module*/
 module.exports = function (server) {
-'use strict';
+    'use strict';
     var q = require('q');
     var Application = server.models.Application;
     var _ = require('lodash');
-    
+
 
     /**
      * Read all applications
@@ -22,14 +22,16 @@ module.exports = function (server) {
     function readApplicationById(id, callback) {
         return Application.findById(id, callback);
     }
-    
+
     /**
      * Get an application by Name
      * @param {String} name       Application Name
      * @param {function} callback Callback function
      */
     function readApplicationByName(name, callback) {
-        return Application.find({name: name}, callback);
+        return Application.find({
+            name: name
+        }, callback);
     }
 
     /**
@@ -38,24 +40,27 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function createApplication(applicationData, callback) {
-        return q.promise(function(resolve, reject) {
+        return q.promise(function (resolve, reject) {
             var application = new Application();
             application.name = applicationData.name;
             application.active = true;
-            application.save(function(err, createdApplication) {
+            application.save(function (err, createdApplication) {
                 if (!err) {
                     resolve({
                         _id: application._id,
                         name: application.name
                     });
-                    callback && callback(null, {
-                        _id: application._id,
-                        name: application.name
-                        }
-                    );
+                    if (callback) {
+                        callback(null, {
+                            _id: application._id,
+                            name: application.name
+                        });
+                    }
                 } else {
                     reject(err);
-                    callback && callback(err);
+                    if (callback) {
+                        callback(err);
+                    }
                 }
             });
         });
@@ -79,7 +84,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function updateApplication(id, applicationData, callback) {
-        return q.promise(function(resolve, reject) {
+        return q.promise(function (resolve, reject) {
             Application.findById(id, function (err, application) {
                 if (err) {
                     reject(err);
@@ -91,9 +96,9 @@ module.exports = function (server) {
                 if (applicationData.active) {
                     application.active = applicationData.active;
                 }
-                application.save(callback).then(function(data) {
+                application.save(callback).then(function (data) {
                     resolve(data);
-                }, function(err) {
+                }, function (err) {
                     reject(err);
                 });
             });
@@ -107,6 +112,6 @@ module.exports = function (server) {
         readApplicationByName: readApplicationByName,
         createApplication: createApplication,
         deleteApplication: deleteApplication,
-        updateApplication: updateApplication        
+        updateApplication: updateApplication
     };
 };

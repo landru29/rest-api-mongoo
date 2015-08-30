@@ -3,7 +3,8 @@
     "description": "simple crud",
     "main": "src/server.js",
     "scripts": {
-        "start": "node src/launcher.js | bunyan"
+        "start": "node src/launcher.js | bunyan",
+        "test": "jshint src doc/src"
     },
     "repository": {
         "type": "git",
