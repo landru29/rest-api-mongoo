@@ -8,7 +8,8 @@ module.exports = function (server) {
     var ApplicationSchema   = new Schema({
         name: {
             type: String,
-            required: 'Name is required'
+            required: 'Name is required',
+            unique: true
         },
         active: {
             type: Boolean,

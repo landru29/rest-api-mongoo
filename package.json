@@ -5,6 +5,11 @@
     "scripts": {
         "start": "node src/launcher.js | bunyan"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/landru29/rest-api-mongoo.git"
+    },
+    "license": "MIT",
     "dependencies": {
         "express": "4.13.3",
         "mongoose": "4.1.2",
@@ -15,7 +20,8 @@
         "jsonwebtoken": "5.0.4",
         "path-to-regexp": "1.2.1",
         "docblock-parser": "0.1.3",
-        "q": "1.4.1"
+        "q": "1.4.1",
+        "chalk": "1.1.1"
     },
     "devDependencies": {
         "jshint": "2.8.0"

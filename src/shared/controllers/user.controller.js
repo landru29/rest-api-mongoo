@@ -48,16 +48,24 @@ module.exports = function (server) {
         if (userData.role) {
             user.role = userData.role;
         }
-        return user.save(function (err, createdUser) {
-            if (!err) {
-                callback(null, _.extend({
-                        'refresh-token': generateRefreshToken(createdUser)
-                    },
-                    createdUser._doc
-                ));
-            } else {
-                callback(err);
-            }
+        return q.promise(function(resolve, reject) {
+            user.save(function (err, createdUser) {
+                if (!err) {
+                    resolve( _.extend({
+                            'refresh-token': generateRefreshToken(createdUser)
+                        },
+                        createdUser._doc
+                    ));
+                    callback(null, _.extend({
+                            'refresh-token': generateRefreshToken(createdUser)
+                        },
+                        createdUser._doc
+                    ));
+                } else {
+                    reject(err);
+                    callback(err);
+                }
+            });
         });
     }
 
@@ -75,7 +83,7 @@ module.exports = function (server) {
     /**
      * Update a user
      * @param {String} id         User Identifier
-     * @param {Object}   userData User {name, email, password}
+     * @param {Object}   userData User {name, email, password, delAppId, addAppId}
      * @param {function} callback Callback function
      */
     function updateUser(id, userData, callback) {

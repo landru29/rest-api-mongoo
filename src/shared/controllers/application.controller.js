@@ -1,6 +1,7 @@
 /*global module*/
 module.exports = function (server) {
 'use strict';
+    var q = require('q');
     var Application = server.models.Application;
     var _ = require('lodash');
     

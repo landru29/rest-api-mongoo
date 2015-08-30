@@ -1,0 +1,10 @@
+{
+    "user": {
+        "email": "bob@foo.com",
+        "password": "admin",
+        "role": "admin"
+    },
+    "application": {
+        "name": "documentation"
+    }
+}

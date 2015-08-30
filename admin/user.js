@@ -1,6 +1,7 @@
 (function () {
     'use strict';
-    var globals = require('../global-loader.js')({
+    var chalk = require('chalk');
+    var globals = require('../src/global-loader.js')({
         options: {
             logQuiet: true
         }
@@ -21,36 +22,47 @@
         delete args.action;
         switch (action) {
             case 'insert': 
-                console.log('Insert', args);
+                console.log(chalk.blue('Insert'), args);
                 controller.createUser(args, function(err, data){
-                    console.log(err, data);
+                    if (err) {
+                        console.log(chalk.red('ERROR'), err);
+                    } else {
+                        console.log(chalk.green('SUCCESS'), data);
+                    }
                     globals.mongoose.disconnect();
                 });
                 break;
             case 'read':
+                console.log(chalk.blue('Read'), args);
                 controller.readUsers(function(err, data) {
-                    console.log(err, data);
+                    if (err) {
+                        console.log(chalk.red('ERROR'), err);
+                    } else {
+                        console.log(chalk.green('SUCCESS'), data);
+                    }
                     globals.mongoose.disconnect();
                 });
                 break;
             case 'delete':
+                console.log(chalk.blue('Delete'), args);
                 controller.deleteUser(args.id, function(err) {
                     if (!err) {
-                        console.log('User deleted');
+                        console.log(chalk.green('SUCCESS'), 'User deleted');
                     } else {
-                        console.log(err);
+                        console.log(chalk.red('ERROR'),err);
                     }
                     globals.mongoose.disconnect();
                 });
                 break;
             case 'update':
+                console.log(chalk.blue('Update'), args);
                 var id = args.id;
                 delete args.id;
                 controller.updateUser(id, args, function(err, data){
                     if (!err) {
-                        console.log('User updated', data);
+                        console.log(chalk.green('SUCCESS'), 'User updated', data);
                     } else {
-                        console.log(err);
+                        console.log(chalk.red('ERROR'),err);
                     }
                     globals.mongoose.disconnect();
                 });
@@ -59,6 +71,7 @@
                 globals.mongoose.disconnect();
         }
     } else {
+        console.log(chalk.red('Missing action=insert|read|delete|update'));
         globals.mongoose.disconnect();
     }
 
