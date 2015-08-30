@@ -2,7 +2,8 @@ module.exports = function (server) {
     'use strict';
     var User = server.models.User;
     var _ = require('lodash');
-    
+    var q = require('q');
+
     /**
      * Generate an oauth refresh token
      * @param   {Object} user Mongoose User
@@ -21,7 +22,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function readUsers(callback) {
-        User.find(callback);
+        return User.find(callback);
     }
 
     /**
@@ -30,7 +31,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function readUserById(id, callback) {
-        User.findById(id, callback);
+        return User.findById(id, callback);
     }
 
     /**
@@ -38,7 +39,7 @@ module.exports = function (server) {
      * @param {Object}   userData User {name, email, password}
      * @param {function} callback Callback function
      */
-    function createUser(userData, callback) { 
+    function createUser(userData, callback) {
         var user = new User();
         user.name = userData.name;
         user.email = userData.email;
@@ -47,16 +48,15 @@ module.exports = function (server) {
         if (userData.role) {
             user.role = userData.role;
         }
-        user.save(function(err, createdUser) {
+        return user.save(function (err, createdUser) {
             if (!err) {
-                callback(null, _.extend(
-                    {
+                callback(null, _.extend({
                         'refresh-token': generateRefreshToken(createdUser)
                     },
                     createdUser._doc
                 ));
             } else {
-                 callback(err);
+                callback(err);
             }
         });
     }
@@ -67,35 +67,66 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function deleteUser(id, callback) {
-        User.remove({
+        return User.remove({
             _id: id
         }, callback);
     }
 
     /**
-     * [[Description]]
+     * Update a user
      * @param {String} id         User Identifier
      * @param {Object}   userData User {name, email, password}
      * @param {function} callback Callback function
      */
     function updateUser(id, userData, callback) {
-        User.findById(id, function (err, user) {
-            if (err) {
-                return callback(err);
-            }
-            if (userData.name) {
-                user.name = userData.name;
-            }
-            if (userData.password) {
-                user.password = userData.password;
-            }
-            if (userData.role) {
-                user.role = userData.role;
-            }
-            user.save(callback);
+        return q.promise(function (resolve, reject)  {
+            User.findById(id, function (err, user) {
+                if (err) {
+                    return callback(err);
+                }
+                if (userData.name) {
+                    user.name = userData.name;
+                }
+                if (userData.password) {
+                    user.password = userData.password;
+                }
+                if (userData.role) {
+                    user.role = userData.role;
+                }
+                if (userData.delAppId) {
+                    var index = user.applications.indexOf(userData.addAppId);
+                    if (index > -1) {
+                        user.applications.splice(userData.delAppId, 1);
+                    }
+                }
+                if (userData.addAppId) {
+                    server.controllers.application.readApplicationById(userData.addAppId).then(
+                        function (app) {
+                            var index = user.applications.indexOf(app._id);
+                            if (index < 0) {
+                                user.applications.push(app);
+                            }
+                            user.save(callback).then(function (data) {
+                                resolve(data);
+                            }, function (err) {
+                                reject(err);
+                            });
+                        },
+                        function (err) {
+                            reject(err);
+                            callback && callback(err);
+                        });
+                } else {
+                    user.save(callback).then(function (data) {
+                        resolve(data);
+                    }, function (err) {
+                        reject(err);
+                    });
+                }
+            });
         });
     }
-    
+
     /**
      * Check a user with its email and password
      * @param   {String} email    User email
@@ -103,18 +134,27 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      */
     function checkUser(email, password, callback) {
-        User.find({
-            email: email
-        }, function(err, data){
-            if (data.length !== 1) {
-                return callback('Failed to login');
-            } else {
-                if (_.first(data).comparePassword(password)) {
-                    return callback(null, {'refresh-token': generateRefreshToken(_.first(data))});
-                } else {
+        return q.promise(function (resolve, reject) {
+            User.find({
+                email: email
+            }, function (err, data) {
+                if (data.length !== 1) {
+                    reject('Failed to login');
                     return callback('Failed to login');
+                } else {
+                    if (_.first(data).comparePassword(password)) {
+                        resolve({
+                            'refresh-token': generateRefreshToken(_.first(data))
+                        });
+                        return callback(null, {
+                            'refresh-token': generateRefreshToken(_.first(data))
+                        });
+                    } else {
+                        reject('Failed to login');
+                        return callback('Failed to login');
+                    }
                 }
-            }
+            });
         });
     }
 

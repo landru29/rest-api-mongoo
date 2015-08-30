@@ -63,6 +63,18 @@ module.exports = function (server) {
     UserSchema.methods.isActive = function () {
         return this.active;
     };
+    
+    var processRelations = function() {
+        UserSchema.add({
+            applications:[{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Application'
+            }]
+        });
+    };
 
-    return UserSchema;
+    return {
+        schema: UserSchema,
+        postLoad: processRelations
+    };
 };

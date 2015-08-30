@@ -15,6 +15,11 @@ module.exports = function (server) {
             default: true
         }
     });
+    
+    var processRelations = function() {};
 
-    return ApplicationSchema;
+    return {
+        schema: ApplicationSchema,
+        postLoad: processRelations
+    };
 };

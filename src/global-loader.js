@@ -120,13 +120,23 @@ module.exports = function (server) {
 
     // LOAD MODELS
     // =============================================================================
+    var schemas = {};
     loader(__dirname + '/shared/schemas', /\.schema\.js$/, function (file) {
         var name = _.capitalize(_.camelCase(file.filename.replace(/\..*/, '')));
-        var schema = require(file.fullPathname)(transporter);
+        var schemaDescriptor = require(file.fullPathname)(transporter);
         log.info('MODELS: Loading ' + name);
-        helpers.mongoosePlugin(schema);
-        models[name] = mongoose.model(name, schema);
+        helpers.mongoosePlugin(schemaDescriptor.schema);
+        schemas[name] = schemaDescriptor;
+        //models[name] = mongoose.model(name, schema);
     });
+    for(var name in schemas) {
+        if (schemas[name].postLoad) {
+            schemas[name].postLoad();
+        }
+    }
+    for(var name in schemas) {
+        models[name] = mongoose.model(name, schemas[name].schema);
+    }
     
     // LOAD CONTROLLERS
     // =============================================================================

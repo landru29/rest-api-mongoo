@@ -72,11 +72,17 @@ module.exports = function(server) {
      * @param {String} name     @body            User name
      * @param {String} email    @body            User email
      * @param {String} password @body            User password
+     * @param {String} addAppId @body            Add an application
+     * @param {String} delAppId @body            Delete an application
      * @role admin
      */
     router.put('/:id', function (req, res) {
         controller.updateUser(req.params.id, {
-            name: req.body.name
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+            addAppId: req.body.addAppId,
+            delAppId: req.body.delAppId
         }, function(err, data) {
             server.helpers.response(req, res, err, data, {message: {success: 'User updated'}});
         });
