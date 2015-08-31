@@ -9,7 +9,7 @@ module.exports = function (grunt) {
     
     var configDev = grunt.file.readJSON('src/config.json');
     var apiConfig = grunt.file.readJSON('../src/config.json');
-    configDev.url = apiConfig.server.protocole + '://localhost:' + apiConfig.server.port + '/api/';
+    configDev.url = apiConfig.launcher.api.options.protocole + '://localhost:' + apiConfig.launcher.api.options.port + '/api/';
 
     // Configure Grunt
     grunt.initConfig({
@@ -83,6 +83,10 @@ module.exports = function (grunt) {
         /*************************************************/
         /** TASK USED BUILDING                          **/
         /*************************************************/
+        
+        fileExists: {
+            config: ['./src/config.json']
+        },
 
         useminPrepare: {
             html: {
@@ -309,6 +313,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('serve', [
+        'fileExists',
         'clean:dev',
         'wiredep',
         'ngconstant:dev',
@@ -319,19 +324,9 @@ module.exports = function (grunt) {
         'watch:dev'
     ]);
 
-    grunt.registerTask('prod_check', [
-        'express:prod_check',
-        'open:prod_check',
-        'watch:prod_check'
-    ]);
-
-    grunt.registerTask('check', [
-        'wiredep',
-        'jshint:dev',
-        'karma:unit'
-    ]);
-
     grunt.registerTask('prod', [
+        'fileExists',
+        'jshint',
         'clean:dist',
         'wiredep',
         'ngconstant:dist',

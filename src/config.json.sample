@@ -6,10 +6,6 @@
             "name": "test"
         }
     },
-    "server": {
-        "protocole": "http",
-        "port": 8080
-    },
     "oauth": {
         "refresh-token": {
             "secret": "my refresh token secret",
@@ -24,6 +20,7 @@
         "./server.js": {
             "nb-forks": 2,
             "options": {
+                "protocole": "http",
                 "port": 8080
             }
         }

@@ -6,12 +6,18 @@
     var packageJson = require('../package.json');
     var bunyan = require('bunyan');
     var _ = require('lodash');
+    var fs = require('fs');
     
     var log = bunyan.createLogger({
             name: packageJson.name
         });
 
     if (cluster.isMaster) {
+        
+        if (!fs.existsSync('src/config.json')) {
+            log.fatal('Cannot find config.json');
+            process.exit(1);
+        }
         
         var apiProcessList = [];
         var launcher = config.launcher;
@@ -24,7 +30,7 @@
                 for (var i = 0; i < forks; i++) {
                     apiProcessList.push({
                         pid: cluster.fork({
-                            file: key,
+                            file: launcher[key].script,
                             options: JSON.stringify(options)
                         }).process.pid,
                         file: key,
