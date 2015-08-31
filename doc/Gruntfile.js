@@ -46,12 +46,10 @@ module.exports = function (grunt) {
 
         open: { // open application in Chrome
             dev: {
-                path: 'http://localhost:<%= express.dev.options.port%>',
-                app: 'google-chrome'
+                path: 'http://localhost:<%= express.dev.options.port%>'
             },
             prod_check: {
-                path: 'http://localhost:<%= express.prod_check.options.port%>',
-                app: 'google-chrome'
+                path: 'http://localhost:<%= express.prod_check.options.port%>'
             }
         },
 

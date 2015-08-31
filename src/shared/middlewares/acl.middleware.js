@@ -22,6 +22,9 @@ module.exports = function (server) {
             }
             server.log.info('  *', 'Allow', acl.role);
             req.acl = acl;
+            req.hasRole = function(role){
+                return (acl.role.indexOf(role) !==-1);
+            };
             next();
         } else {
             return res.status(403).send({message: 'Bad ACL'});

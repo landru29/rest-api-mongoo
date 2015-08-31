@@ -18,6 +18,7 @@ module.exports = function (server) {
                         if ((!err) && (userData) && (userData.isActive())) {
                             data.created = new Date().getTime();
                             data.role = userData.role;
+                            data.applications = userData.applications;
                             var accessToken = server.helpers.oauth.encrypt(data, 'access-token');
                             resolve({
                                 'access-token': accessToken

@@ -12,7 +12,18 @@ module.exports = function (server) {
             server.log.info('allowingCrossDomain on ' + allowedOrigin);
             res.header('Access-Control-Allow-Origin', allowedOrigin);
             res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-            res.header('Access-Control-Allow-Headers', 'X-Requested-With, Accept, Origin, Referer, User-Agent, Content-Type, Authorization, X-Mindflash-SessionID, access-token, refresh-token');
+            res.header('Access-Control-Allow-Headers',
+                ([
+                    'X-Requested-With',
+                    'Accept, Origin',
+                    'Referer, User-Agent',
+                    'Content-Type',
+                    'Authorization',
+                    'X-Mindflash-SessionID',
+                    'access-token',
+                    'refresh-token',
+                    'client-application'
+                ]).join(', '));
 
             // intercept OPTIONS method
             if ('OPTIONS' === req.method) {
