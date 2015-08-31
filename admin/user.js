@@ -54,6 +54,17 @@
                     globals.mongoose.disconnect();
                 });
                 break;
+            case 'recovery':
+                console.log(chalk.blue('Recovery'), args);
+                controller.sendRecovery(args.email, function(err, data) {
+                    if (!err) {
+                        console.log(chalk.green('SUCCESS'), data);
+                    } else {
+                        console.log(chalk.red('ERROR'),err);
+                    }
+                    globals.mongoose.disconnect();
+                });
+                break;
             case 'update':
                 console.log(chalk.blue('Update'), args);
                 var id = args.id;

@@ -22,7 +22,8 @@
         "path-to-regexp": "1.2.1",
         "docblock-parser": "0.1.3",
         "q": "1.4.1",
-        "chalk": "1.1.1"
+        "chalk": "1.1.1",
+        "mailjet-sendemail": "1.1.4"
     },
     "devDependencies": {
         "jshint": "2.8.0"

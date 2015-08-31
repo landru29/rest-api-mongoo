@@ -9,6 +9,7 @@ module.exports = function (server) {
     /**
      * Read all applications
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function readApplications(callback) {
         return Application.find(callback);
@@ -18,6 +19,7 @@ module.exports = function (server) {
      * Get an application by ID
      * @param {String} id         Application Identifier
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function readApplicationById(id, callback) {
         return Application.findById(id, callback);
@@ -27,6 +29,7 @@ module.exports = function (server) {
      * Get an application by Name
      * @param {String} name       Application Name
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function readApplicationByName(name, callback) {
         return Application.find({
@@ -38,6 +41,7 @@ module.exports = function (server) {
      * Create an Application
      * @param {Object}   ApplicationData Application {name}
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function createApplication(applicationData, callback) {
         return q.promise(function (resolve, reject) {
@@ -70,6 +74,7 @@ module.exports = function (server) {
      * Delete a Application
      * @param {String} id         Application Identifier
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function deleteApplication(id, callback) {
         return Application.remove({
@@ -82,6 +87,7 @@ module.exports = function (server) {
      * @param {String} id         Application Identifier
      * @param {Object}   ApplicationData Application {name, email, password}
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function updateApplication(id, applicationData, callback) {
         return q.promise(function (resolve, reject) {

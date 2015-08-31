@@ -17,12 +17,19 @@
         }
     },
     "launcher": {
-        "./server.js": {
+        "api": {
             "nb-forks": 2,
+            "script": "./server.js",
             "options": {
                 "protocole": "http",
                 "port": 8080
             }
         }
+    },
+    "mailjet": {
+        "key": "xxxx",
+        "secret": "xxx",
+        "sender": "API",
+        "subject": "Account recovery"
     }
 }

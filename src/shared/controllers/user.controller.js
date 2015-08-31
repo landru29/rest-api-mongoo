@@ -3,6 +3,8 @@ module.exports = function (server) {
     var User = server.models.User;
     var _ = require('lodash');
     var q = require('q');
+    var Mailjet = require('mailjet-sendemail');
+    var mailjet = new Mailjet(server.config.mailjet.key, server.config.mailjet.secret);
 
     /**
      * Generate an oauth refresh token
@@ -20,6 +22,7 @@ module.exports = function (server) {
     /**
      * Read all users
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function readUsers(callback) {
         return User.find(callback);
@@ -29,6 +32,7 @@ module.exports = function (server) {
      * Get a user by ID
      * @param {String} id         User Identifier
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function readUserById(id, callback) {
         return User.findById(id, callback);
@@ -38,6 +42,7 @@ module.exports = function (server) {
      * Create a user
      * @param {Object}   userData User {name, email, password}
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function createUser(userData, callback) {
         var user = new User();
@@ -48,10 +53,10 @@ module.exports = function (server) {
         if (userData.role) {
             user.role = userData.role;
         }
-        return q.promise(function(resolve, reject) {
+        return q.promise(function (resolve, reject) {
             user.save(function (err, createdUser) {
                 if (!err) {
-                    resolve( _.extend({
+                    resolve(_.extend({
                             'refresh-token': generateRefreshToken(createdUser)
                         },
                         createdUser._doc
@@ -73,6 +78,7 @@ module.exports = function (server) {
      * Delete a user
      * @param {String} id         User Identifier
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function deleteUser(id, callback) {
         return User.remove({
@@ -85,6 +91,7 @@ module.exports = function (server) {
      * @param {String} id         User Identifier
      * @param {Object}   userData User {name, email, password, delAppId, addAppId}
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function updateUser(id, userData, callback) {
         return q.promise(function (resolve, reject)  {
@@ -142,6 +149,7 @@ module.exports = function (server) {
      * @param   {String} email    User email
      * @param   {String} password User password
      * @param {function} callback Callback function
+     * @returns {Object} Promise
      */
     function checkUser(email, password, callback) {
         return q.promise(function (resolve, reject) {
@@ -168,6 +176,71 @@ module.exports = function (server) {
         });
     }
 
+    /**
+     * Get User by email
+     * @param   {String} email User email
+     * @returns {Object} Promise
+     */
+    function findUserByEmail(email, callback) {
+        return q.promise(function (resolve, reject) {
+            User.find({
+                email: email
+            }).then(
+                function (data) {
+                    if (data.length === 1) {
+                        resolve(data);
+                        if (callback) {
+                            callback(null, data);
+                        }
+                    } else {
+                        reject('User not found');
+                        if (callback) {
+                            callback('User not found');
+                        }
+                    }
+                },
+                function (err) {
+                    reject(err);
+                    if (callback) {
+                        callback(err);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Send a recovery email
+     * @param   {String} email User email
+     * @returns {Object} Promise
+     */
+    function sendRecovery(email, callback) {
+        return q.promise(function (resolve, reject) {
+            findUserByEmail(email).then(
+                function (user) {
+                    server.controller.userConfirm.createToken(user.email).then(
+                        function (token) {
+                            mailjet.sendContent(
+                                server.config.mailjet.sender, 
+                                [user.email],
+                                server.config.mailjet.subject,
+                                'html',
+                                '<p>Your recovery token</p>' + token.token
+                            );
+                            resolve(token);
+                        },
+                        function (err) {
+                            reject(err);
+                        }
+                    );
+                },
+                function (err) {
+                    reject(err);
+                }
+            );
+        });
+    }
+
 
     return {
         readUsers: readUsers,
@@ -175,6 +248,8 @@ module.exports = function (server) {
         deleteUser: deleteUser,
         updateUser: updateUser,
         readUserById: readUserById,
-        checkUser: checkUser
+        checkUser: checkUser,
+        findUserByEmail: findUserByEmail,
+        sendRecovery: sendRecovery
     };
 };
