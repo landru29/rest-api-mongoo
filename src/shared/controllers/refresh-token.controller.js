@@ -1,7 +1,7 @@
 /*global module*/
 module.exports = function (server) {
     'use strict';
-    var User = server.models.User;
+    var User = server.getModel('User');
     var q = require('q');
 
     /**

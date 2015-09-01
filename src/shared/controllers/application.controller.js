@@ -2,7 +2,7 @@
 module.exports = function (server) {
     'use strict';
     var q = require('q');
-    var Application = server.models.Application;
+    var Application = server.getModel('Application');
     var _ = require('lodash');
 
 

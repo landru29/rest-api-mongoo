@@ -4,7 +4,7 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/launcher.js | bunyan",
-        "test": "jshint src doc/src"
+        "test": "jshint src doc/src && mocha"
     },
     "repository": {
         "type": "git",
@@ -26,6 +26,8 @@
         "mailjet-sendemail": "1.1.4"
     },
     "devDependencies": {
-        "jshint": "2.8.0"
+        "jshint": "2.8.0",
+        "mocha": "2.3.0",
+        "chai": "3.2.0"
     }
 }

@@ -1,6 +1,6 @@
 module.exports = function (server) {
     'use strict';
-    var UserConfirm = server.models.UserConfirm;
+    var UserConfirm = server.getModel('UserConfirm');
     var _ = require('lodash');
     var q = require('q');
     

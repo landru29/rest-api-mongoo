@@ -1,6 +1,6 @@
 module.exports = function (server) {
     'use strict';
-    var User = server.models.User;
+    var User = server.getModel('User');
     var _ = require('lodash');
     var q = require('q');
     var Mailjet = require('mailjet-sendemail');
@@ -94,6 +94,7 @@ module.exports = function (server) {
      * @returns {Object} Promise
      */
     function updateUser(id, userData, callback) {
+        console.log('updating');
         return q.promise(function (resolve, reject)  {
             User.findById(id, function (err, user) {
                 if (err) {
