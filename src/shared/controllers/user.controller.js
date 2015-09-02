@@ -94,7 +94,6 @@ module.exports = function (server) {
      * @returns {Object} Promise
      */
     function updateUser(id, userData, callback) {
-        console.log('updating');
         return q.promise(function (resolve, reject)  {
             User.findById(id, function (err, user) {
                 if (err) {
@@ -165,12 +164,16 @@ module.exports = function (server) {
                         resolve({
                             'refresh-token': generateRefreshToken(_.first(data))
                         });
-                        return callback(null, {
-                            'refresh-token': generateRefreshToken(_.first(data))
-                        });
+                        if (callback) {
+                            return callback(null, {
+                                'refresh-token': generateRefreshToken(_.first(data))
+                            });
+                        }
                     } else {
                         reject('Failed to login');
-                        return callback('Failed to login');
+                        if (callback) {
+                            return callback('Failed to login');
+                        }
                     }
                 }
             });
@@ -189,9 +192,9 @@ module.exports = function (server) {
             }).then(
                 function (data) {
                     if (data.length === 1) {
-                        resolve(data);
+                        resolve(data[0]);
                         if (callback) {
-                            callback(null, data);
+                            callback(null, data[0]);
                         }
                     } else {
                         reject('User not found');

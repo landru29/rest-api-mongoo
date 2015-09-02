@@ -31,8 +31,7 @@
         );
     };
 
-    beforeEach(function (done) {
-
+    beforeEach(function (done) {;
         if (!globalData) {
             var connectionChain = 'mongodb://' +
                 config.database.host + ':' +

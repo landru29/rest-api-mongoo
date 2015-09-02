@@ -2,7 +2,7 @@
 module.exports = function (server) {
     var q = require('q');
 
-    function doNext(fn /*, arguments*/ ) {
+    function next(fn /*, arguments*/ ) {
         var args = Array.prototype.splice.call(arguments, 1);
         return function () {
             args = args.concat(Array.prototype.slice.call(arguments));
@@ -10,17 +10,17 @@ module.exports = function (server) {
         };
     }
 
-    function doInOrder(tasks, commonData) {
+    function execute(tasks, commonData) {
         if (!commonData) {
             commonData = [];
         }
         return q.promise(function (resolve, reject) {
-            if (tasks.length) {
-                var currentTask = tasks[0];
-                q.when(currentTask.apply(null, commonData)).then(
-                    function (data) {
-                        commonData.unshift(data);
-                        doInOrder(tasks.slice(1), commonData).then(
+            var currentTask = tasks[0];
+            q.when(currentTask.apply(null, commonData)).then(
+                function (data) {
+                    commonData.unshift(data);
+                    if (tasks.length>1) {
+                        execute(tasks.slice(1), commonData).then(
                             function (data) {
                                 resolve(data);
                             },
@@ -28,20 +28,20 @@ module.exports = function (server) {
                                 reject(err);
                             }
                         );
-
-                    },
-                    function (err) {
-                        reject(err);
-                    });
-            } else {
-                resolve();
-            }
+                    } else {
+                        resolve(data);
+                    }
+                },
+                function (err) {
+                    reject(err);
+                }
+            );
         });
     }
     
     return {
-        doInOrder: doInOrder,
-        doNext: doNext
+        execute: execute,
+        next: next
     };
 
 };
