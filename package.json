@@ -4,7 +4,7 @@
     "main": "src/server.js",
     "scripts": {
         "start": "node src/launcher.js | bunyan",
-        "test": "jshint src doc/src && find ./test -iname '*.spec.js' | xargs mocha"
+        "test": "jshint src doc/src &&  mocha"
     },
     "repository": {
         "type": "git",

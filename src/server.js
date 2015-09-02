@@ -3,22 +3,22 @@
 module.exports = function (options) {
     'use strict';
     var express = require('express'); // call express
-    var app = express(); // define our app using express
+    var expressApp = express(); // define our app using express
     var bodyParser = require('body-parser');
     var _ = require('lodash');
 
 
     // CONFIGURE THE SERVER
     // =============================================================================
-    app.use(bodyParser.urlencoded({
+    expressApp.use(bodyParser.urlencoded({
         extended: true
     }));
-    app.use(bodyParser.json());
+    expressApp.use(bodyParser.json());
     
     var App = require('./app.js');
     
     var application = new App(_.extend({
-            app: app,
+            app: expressApp,
             metaScanFile: __filename
         },
         options
@@ -29,13 +29,13 @@ module.exports = function (options) {
 
         // REGISTER OUR ROUTES
         // =============================================================================
-        app.use(application.middlewares.cors);
-        app.use(function (req, res, next) {
+        expressApp.use(application.middlewares.cors);
+        expressApp.use(function (req, res, next) {
             application.log.info(req.method.toUpperCase(), req.url);
             next();
         });
-        app.use(application.middlewares.acl);
-        app.use(application.middlewares.requiredFields);
+        expressApp.use(application.middlewares.acl);
+        expressApp.use(application.middlewares.requiredFields);
 
         /**
          * @followRoute ./server.route.js
@@ -47,7 +47,7 @@ module.exports = function (options) {
         application.log.info('Launching server');
 
         try {
-            app.listen(port, function () {
+            expressApp.listen(port, function () {
                 application.log.info('Server is listening on port ' + port);
             });
         } catch (error) {
