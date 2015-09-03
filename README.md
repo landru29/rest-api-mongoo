@@ -8,8 +8,11 @@ Create the following configuration files (taking example on the samples):
 * ```doc/src/config.json```
 
 Then launch these commandes:
-````npm install
-cd doc && npm install && bower install
+````npm install -g bunyan
+npm install -g grunt-cli
+npm install -g bower
+npm install
+cd doc && npm install && bower install && cd ..
 ````
 
 ##Test the API
@@ -19,7 +22,7 @@ cd doc && npm install && bower install
 ``npm start``
 
 ##Build the API
-todo
+``grunt``
 
 ##Launch the interactive documentation
 `` cd doc

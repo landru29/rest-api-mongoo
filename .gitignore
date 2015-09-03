@@ -30,5 +30,6 @@ bower_components
 
 build
 dist
+dist.tgz
 
 config.json

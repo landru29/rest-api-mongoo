@@ -2,7 +2,6 @@
 (function () {
     'use strict';
     var cluster = require('cluster');
-    var config = require('./config.json');
     var packageJson = require('../package.json');
     var bunyan = require('bunyan');
     var _ = require('lodash');
@@ -14,10 +13,11 @@
 
     if (cluster.isMaster) {
         
-        if (!fs.existsSync('src/config.json')) {
+        if (!fs.existsSync('./config.json')) {
             log.fatal('Cannot find config.json');
             process.exit(1);
         }
+        var config = require('./config.json');
         
         var apiProcessList = [];
         var launcher = config.launcher;
@@ -61,11 +61,12 @@
 
         // relaunch process if dying
         cluster.on('exit', function (worker) {
-            log.fatal('Worker ' + worker.process.pid + ' died :(', signal);
+            log.fatal('Worker ' + worker.process.pid + ' died :(');
             checkForRelaunch(apiProcessList, worker);
         });
 
     } else {
+        log.info('Launching', process.env.file);
         require(process.env.file)(JSON.parse(process.env.options));
     }
 })();

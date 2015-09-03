@@ -36,10 +36,15 @@ module.exports = function (grunt) {
 
         'file-creator': {
             'packageJson': {
-                'dist/package.json': function (fs, fd, done) {
-                    fs.writeSync(fd, JSON.stringify(launcher));
-                    done();
-                }
+                files: [
+                    {
+                        file: '<%= project.dist%>/package.json',
+                        method: function (fs, fd, done) {
+                            fs.writeSync(fd, JSON.stringify(launcher));
+                            done();
+                        }
+                    }
+                ]
             }
         },
 
@@ -49,6 +54,7 @@ module.exports = function (grunt) {
                 'Gruntfile.js'
             ]
         },
+
 
         fileExists: {
             config: ['./src/config.json']
@@ -82,7 +88,7 @@ module.exports = function (grunt) {
                         src: dependencies,
                         dest: '<%= project.dist%>'
                     }
-                ],
+                ]
             }
         },
 
