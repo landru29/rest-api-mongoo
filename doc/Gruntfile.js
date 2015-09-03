@@ -2,7 +2,7 @@
 /*global require, module,  __dirname */
 
 module.exports = function (grunt) {
-    "use strict";
+    'use strict';
 
     // Load Grunt tasks declared in the package.json file
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -183,8 +183,7 @@ module.exports = function (grunt) {
 
         clean: { // erase all files in dist and build folder
             dist: ['<%= project.dist%>', '<%= project.build%>'],
-            dev: ['<%= project.build%>'],
-            parse: ['<%= project.parse%>']
+            dev: ['<%= project.build%>']
         },
 
         filerev: { // change the name of files to avoid browser cache issue
