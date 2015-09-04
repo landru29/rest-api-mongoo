@@ -11,7 +11,7 @@ module.exports = function (server) {
      * @returns {Object} Promise
      */
     function generateAccessToken(refreshToken, callback) {
-        return q.promise(function(resolve, reject) {
+        return q.promise(function (resolve, reject) {
             server.helpers.oauth.decrypt(refreshToken, 'refresh-token', function (err, data) {
                 if (!err) {
                     User.findById(data._id, function (err, userData) {
@@ -23,17 +23,23 @@ module.exports = function (server) {
                             resolve({
                                 'access-token': accessToken
                             });
-                            callback(null, {
-                                'access-token': accessToken
-                            });
+                            if (callback) {
+                                callback(null, {
+                                    'access-token': accessToken
+                                });
+                            }
                         } else {
                             reject('User is not allowed to use the application anymore');
-                            callback('User is not allowed to use the application anymore');
+                            if (callback) {
+                                callback('User is not allowed to use the application anymore');
+                            }
                         }
                     });
                 } else {
                     reject(err);
-                    callback(err);
+                    if (callback) {
+                        callback(err);
+                    }
                 }
             });
         });

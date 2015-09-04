@@ -4,23 +4,26 @@
     var assert = require('chai').assert;
     var testFrame = require('../../test-frame.js');
     var fixtures = require('./application.fixture.json');
-    
-    beforeEach(function (done) {
-        var doInOrder = testFrame().helpers.doInOrder;
-        var tasks = fixtures.map(function (appli) {
-            return doInOrder.next(
-                testFrame().controllers.application.createApplication,
-                appli
-            );
-        });
-        doInOrder.execute(tasks).then(function () {
-            done();
-        }, function (err) {
-            done(err || 'beforeEach');
-        });
-    });
+
+
 
     describe('Application: Controller', function () {
+
+        beforeEach(function (done) {
+            var doInOrder = testFrame().helpers.doInOrder;
+            var tasks = fixtures.map(function (appli) {
+                return doInOrder.next(
+                    testFrame().controllers.application.createApplication,
+                    appli
+                );
+            });
+            doInOrder.execute(tasks).then(function () {
+                done();
+            }, function (err) {
+                done(err || 'beforeEach');
+            });
+        });
+
         describe('#createApplication', function () {
             it('Should create an application', function (done) {
                 testFrame().controllers.application.createApplication({
@@ -91,18 +94,18 @@
                 doInOrder.execute([
                     doInOrder.next(testFrame().controllers.application.readApplications),
                     doInOrder.next(
-                        function(applis) {
+                        function (applis) {
                             return testFrame().controllers.application.deleteApplication(applis[0]._id);
                         }
                     ),
                     doInOrder.next(testFrame().controllers.application.readApplications, null)
-                ]).then(function(data) {
+                ]).then(function (data) {
                     assert.equal(data.length, fixtures.length - 1);
                     done();
-                }, function(err){
+                }, function (err) {
                     done(err);
                 });
-                
+
             });
         });
 
@@ -113,27 +116,27 @@
                 doInOrder.execute([
                     doInOrder.next(testFrame().controllers.application.readApplications),
                     doInOrder.next(
-                        function(applis) {
+                        function (applis) {
                             return testFrame().controllers.application.updateApplication(applis[0]._id, {
                                 name: newName
                             });
                         }
                     ),
                     doInOrder.next(
-                        function(updateStatus, applis) {
+                        function (updateStatus, applis) {
                             return testFrame().controllers.application.readApplicationById(applis[0]._id);
                         }
                     )
-                ]).then(function(updatedAppli) {
+                ]).then(function (updatedAppli) {
                     assert.equal(updatedAppli.name, newName);
                     done();
-                }, function(err){
+                }, function (err) {
                     done(err);
                 });
-                
+
             });
         });
-        
+
 
     });
 })();
