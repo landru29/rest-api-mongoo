@@ -21,15 +21,15 @@ module.exports = function (server) {
                     commonData.unshift(data);
                     if (tasks.length>1) {
                         execute(tasks.slice(1), commonData).then(
-                            function (data) {
-                                resolve(data);
+                            function (dataNext) {
+                                resolve(dataNext);
                             },
                             function (err) {
                                 reject(err);
                             }
                         );
                     } else {
-                        resolve(data);
+                        resolve(commonData);
                     }
                 },
                 function (err) {

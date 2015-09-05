@@ -4,6 +4,7 @@
     var assert = require('chai').assert;
     var testFrame = require('../../test-frame.js');
     var fixtures = require('./application.fixture.json');
+    var _ = require('lodash');
 
 
 
@@ -100,7 +101,8 @@
                     ),
                     doInOrder.next(testFrame().controllers.application.readApplications, null)
                 ]).then(function (data) {
-                    assert.equal(data.length, fixtures.length - 1);
+                    var applications = _.first(data);
+                    assert.equal(applications.length, fixtures.length - 1);
                     done();
                 }, function (err) {
                     done(err);
@@ -127,7 +129,8 @@
                             return testFrame().controllers.application.readApplicationById(applis[0]._id);
                         }
                     )
-                ]).then(function (updatedAppli) {
+                ]).then(function (data) {
+                    var updatedAppli = _.first(data);
                     assert.equal(updatedAppli.name, newName);
                     done();
                 }, function (err) {

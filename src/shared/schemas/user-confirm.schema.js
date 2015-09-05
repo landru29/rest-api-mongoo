@@ -6,7 +6,7 @@ module.exports = function (server) {
     var Schema = mongoose.Schema;
     var crypto = require('crypto');
     require('mongoose-type-email');
-    
+
     var validateEmail = function (email) {
         var re = /^\w+([\.\-]?\w+)*@\w+([\.\-]?\w+)*(\.\w{2,3})+$/;
         return re.test(email);
@@ -24,11 +24,12 @@ module.exports = function (server) {
     });
 
     UserConfirmSchema.pre('save', function (next) {
-        var expire = new Date().getTime() + 3600*1000*2;
-        this.expire = new Date(expire);
-        crypto.randomBytes(48, function(ex, buf) {
-          this.token = buf.toString('hex');
-            next();
+        var self = this;
+        var expire = new Date().getTime() + 3600 * 1000 * 2;
+        this.expire = this.expire ? this.expire : new Date(expire);
+        crypto.randomBytes(48, function (ex, buf) {
+            self.token = buf.toString('hex');
+            return next();
         });
     });
 

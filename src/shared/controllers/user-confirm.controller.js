@@ -17,7 +17,7 @@ module.exports = function (server) {
             }).then(
                 function (data) {
                     if (data.length === 1) {
-                        resolve(data);
+                        resolve(_.first(data));
                         if (callback) {
                             callback(null, data);
                         }
@@ -59,10 +59,14 @@ module.exports = function (server) {
             token.save(function (err, createdToken) {
                 if (!err) {
                     resolve(createdToken);
-                    callback(null, createdToken);
+                    if (callback) {
+                        callback(null, createdToken);
+                    }
                 } else {
                     reject(err);
-                    callback(err);
+                    if (callback) {
+                        callback(err);
+                    }
                 }
             });
         });
@@ -75,7 +79,7 @@ module.exports = function (server) {
      * @returns {Object} Promise
      */
     function deleteToken(token, callback) {
-        return User.remove({
+        return UserConfirm.remove({
             token: token
         }, callback);
     }

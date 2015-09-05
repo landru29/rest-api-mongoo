@@ -4,6 +4,7 @@
     var assert = require('chai').assert;
     var testFrame = require('../../test-frame.js');
     var fixtures = require('./refresh-token.fixture.json');
+    var _ = require('lodash');
 
 
     describe('Refresh-token: Controller', function () {
@@ -34,7 +35,8 @@
                         return testFrame().controllers.refreshToken.generateAccessToken(userLogin['refresh-token']);
                     })
                 ]).then(function (data) {
-                    assert.isDefined(data['access-token']);
+                    var token = _.first(data);
+                    assert.isDefined(token['access-token']);
                     done();
                 }, function (err) {
                     done(err);

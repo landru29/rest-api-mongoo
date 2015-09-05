@@ -4,6 +4,7 @@
     var assert = require('chai').assert;
     var testFrame = require('../../test-frame.js');
     var fixtures = require('./user.fixture.json');
+    var _ = require('lodash');
 
 
 
@@ -103,7 +104,8 @@
                     ),
                     doInOrder.next(testFrame().controllers.user.readUsers, null)
                 ]).then(function (data) {
-                    assert.equal(data.length, fixtures.length - 1);
+                    var user = _.first(data);
+                    assert.equal(user.length, fixtures.length - 1);
                     done();
                 }, function (err) {
                     done(err);
@@ -130,7 +132,8 @@
                             return testFrame().controllers.user.readUserById(users[0]._id);
                         }
                     )
-                ]).then(function (updatedUser) {
+                ]).then(function (data) {
+                    var updatedUser = _.first(data);
                     assert.equal(updatedUser.name, newName);
                     done();
                 }, function (err) {

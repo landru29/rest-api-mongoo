@@ -53,7 +53,7 @@ module.exports = function (server) {
             return next();
         }
         user.password = crypto.createHash('sha256').update(user.password).digest('hex');
-        next();
+        return next();
     });
 
     UserSchema.methods.comparePassword = function (candidatePassword) {
