@@ -10,7 +10,8 @@ module.exports = function (server) {
      * @param   {Function} callback     Callback function
      * @returns {Object} Promise
      */
-    function generateAccessToken(refreshToken, callback) {
+    function generateAccessToken(refreshToken /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             server.helpers.oauth.decrypt(refreshToken, 'refresh-token', function (err, data) {
                 if (!err) {
@@ -23,23 +24,17 @@ module.exports = function (server) {
                             resolve({
                                 'access-token': accessToken
                             });
-                            if (callback) {
-                                callback(null, {
-                                    'access-token': accessToken
-                                });
-                            }
+                            callback(null, {
+                                'access-token': accessToken
+                            });
                         } else {
                             reject('User is not allowed to use the application anymore');
-                            if (callback) {
-                                callback('User is not allowed to use the application anymore');
-                            }
+                            callback('User is not allowed to use the application anymore');
                         }
                     });
                 } else {
                     reject(err);
-                    if (callback) {
-                        callback(err);
-                    }
+                    callback(err);
                 }
             });
         });

@@ -116,7 +116,9 @@
                 var doInOrder = testFrame().helpers.doInOrder;
                 var newName = 'rococo';
                 doInOrder.execute([
-                    doInOrder.next(testFrame().controllers.application.readApplications),
+                    doInOrder.next(function() {
+                        return testFrame().controllers.application.readApplications();
+                    }),
                     doInOrder.next(
                         function (applis) {
                             return testFrame().controllers.application.updateApplication(applis[0]._id, {
@@ -131,6 +133,7 @@
                     )
                 ]).then(function (data) {
                     var updatedAppli = _.first(data);
+                    //console.log(data, updatedAppli);
                     assert.equal(updatedAppli.name, newName);
                     done();
                 }, function (err) {

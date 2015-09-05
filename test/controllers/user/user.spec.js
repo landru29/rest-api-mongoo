@@ -119,7 +119,11 @@
                 var doInOrder = testFrame().helpers.doInOrder;
                 var newName = 'rococo';
                 doInOrder.execute([
-                    doInOrder.next(testFrame().controllers.user.readUsers),
+                    doInOrder.next(
+                        function() {
+                            return testFrame().controllers.user.readUsers(); 
+                        }
+                    ),
                     doInOrder.next(
                         function (users) {
                             return testFrame().controllers.user.updateUser(users[0]._id, {

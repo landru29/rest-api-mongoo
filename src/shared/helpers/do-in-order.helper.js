@@ -18,6 +18,7 @@ module.exports = function (server) {
             var currentTask = tasks[0];
             q.when(currentTask.apply(null, commonData)).then(
                 function (data) {
+                    //console.log('doInOrder', data);
                     commonData.unshift(data);
                     if (tasks.length>1) {
                         execute(tasks.slice(1), commonData).then(

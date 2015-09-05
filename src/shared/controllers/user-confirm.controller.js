@@ -9,7 +9,8 @@ module.exports = function (server) {
      * @param   {String} token Validation token
      * @returns {Object} Promise
      */
-    function findByToken(token, callback) {
+    function findByToken(token /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             UserConfirm.find({
                 token: token,
@@ -18,28 +19,23 @@ module.exports = function (server) {
                 function (data) {
                     if (data.length === 1) {
                         resolve(_.first(data));
-                        if (callback) {
-                            callback(null, data);
-                        }
+                        callback(null, data);
                     } else {
                         reject('Token not found');
-                        if (callback) {
-                            callback('Token not found');
-                        }
+                        callback('Token not found');
                     }
                 },
                 function (err) {
                     reject(err);
-                    if (callback) {
-                        callback(err);
-                    }
+                    callback(err);
                 }
             );
         });
     }
     
     
-    function cleanTokens(callback) {
+    function cleanTokens(/*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return User.remove({
             expire: {$gt: new Date()}
         }, callback);
@@ -52,21 +48,18 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function createToken(email, callback) {
+    function createToken(email /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         var token = new UserConfirm();
         token.email = email;
         return q.promise(function (resolve, reject) {
             token.save(function (err, createdToken) {
                 if (!err) {
                     resolve(createdToken);
-                    if (callback) {
-                        callback(null, createdToken);
-                    }
+                    callback(null, createdToken);
                 } else {
                     reject(err);
-                    if (callback) {
-                        callback(err);
-                    }
+                    callback(err);
                 }
             });
         });
@@ -78,7 +71,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function deleteToken(token, callback) {
+    function deleteToken(token /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return UserConfirm.remove({
             token: token
         }, callback);

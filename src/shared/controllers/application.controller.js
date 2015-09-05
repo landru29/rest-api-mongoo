@@ -11,7 +11,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readApplications(callback) {
+    function readApplications(/*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return Application.find(callback);
     }
 
@@ -21,8 +22,18 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readApplicationById(id, callback) {
-        return Application.findById(id, callback);
+    function readApplicationById(id /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
+        return q.promise(function (resolve, reject) {
+            Application.findById(id, callback).then(
+                function(data) {
+                    resolve(_.first(data));
+                },
+                function(err) {
+                    reject(err);
+                }
+            );
+        });
     }
 
     /**
@@ -31,7 +42,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readApplicationByName(name, callback) {
+    function readApplicationByName(name /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return Application.find({
             name: name
         }, callback);
@@ -43,7 +55,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function createApplication(applicationData, callback) {
+    function createApplication(applicationData /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             var application = new Application();
             application.name = applicationData.name;
@@ -54,17 +67,13 @@ module.exports = function (server) {
                         _id: application._id,
                         name: application.name
                     });
-                    if (callback) {
-                        callback(null, {
-                            _id: application._id,
-                            name: application.name
-                        });
-                    }
+                    callback(null, {
+                        _id: application._id,
+                        name: application.name
+                    });
                 } else {
                     reject(err);
-                    if (callback) {
-                        callback(err);
-                    }
+                    callback(err);
                 }
             });
         });
@@ -76,7 +85,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function deleteApplication(id, callback) {
+    function deleteApplication(id /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return Application.remove({
             _id: id
         }, callback);
@@ -89,7 +99,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function updateApplication(id, applicationData, callback) {
+    function updateApplication(id, applicationData /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             Application.findById(id, function (err, application) {
                 if (err) {
@@ -104,8 +115,10 @@ module.exports = function (server) {
                 }
                 application.save(callback).then(function (data) {
                     resolve(data);
+                    callback(null, data);
                 }, function (err) {
                     reject(err);
+                    callback(err);
                 });
             });
         });

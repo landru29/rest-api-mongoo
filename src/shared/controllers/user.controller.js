@@ -24,7 +24,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readUsers(callback) {
+    function readUsers(/*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return User.find(callback);
     }
 
@@ -34,8 +35,18 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readUserById(id, callback) {
-        return User.findById(id, callback);
+    function readUserById(id /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
+        return q.promise(function (resolve, reject) {
+            User.findById(id, callback).then(
+                function(data) {
+                    resolve(_.first(data));
+                },
+                function(err) {
+                    reject(err);
+                }
+            );
+        });
     }
 
     /**
@@ -44,7 +55,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function createUser(userData, callback) {
+    function createUser(userData /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         var user = new User();
         user.name = userData.name;
         user.email = userData.email;
@@ -80,7 +92,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function deleteUser(id, callback) {
+    function deleteUser(id /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return User.remove({
             _id: id
         }, callback);
@@ -93,7 +106,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function updateUser(id, userData, callback) {
+    function updateUser(id, userData /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject)  {
             User.findById(id, function (err, user) {
                 if (err) {
@@ -129,9 +143,7 @@ module.exports = function (server) {
                         },
                         function (err) {
                             reject(err);
-                            if (callback) {
-                                callback(err);
-                            }
+                            callback(err);
                         });
                 } else {
                     user.save(callback).then(function (data) {
@@ -151,7 +163,8 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function checkUser(email, password, callback) {
+    function checkUser(email, password /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             User.find({
                 email: email
@@ -164,16 +177,12 @@ module.exports = function (server) {
                         resolve({
                             'refresh-token': generateRefreshToken(_.first(data))
                         });
-                        if (callback) {
-                            return callback(null, {
-                                'refresh-token': generateRefreshToken(_.first(data))
-                            });
-                        }
+                        return callback(null, {
+                            'refresh-token': generateRefreshToken(_.first(data))
+                        });
                     } else {
                         reject('Failed to login');
-                        if (callback) {
-                            return callback('Failed to login');
-                        }
+                        return callback('Failed to login');
                     }
                 }
             });
@@ -185,7 +194,8 @@ module.exports = function (server) {
      * @param   {String} email User email
      * @returns {Object} Promise
      */
-    function findUserByEmail(email, callback) {
+    function findUserByEmail(email /*, callback*/) {
+        var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             User.find({
                 email: email
@@ -193,21 +203,15 @@ module.exports = function (server) {
                 function (data) {
                     if (data.length === 1) {
                         resolve(data[0]);
-                        if (callback) {
-                            callback(null, data[0]);
-                        }
+                        callback(null, data[0]);
                     } else {
                         reject('User not found');
-                        if (callback) {
-                            callback('User not found');
-                        }
+                        callback('User not found');
                     }
                 },
                 function (err) {
                     reject(err);
-                    if (callback) {
-                        callback(err);
-                    }
+                    callback(err);
                 }
             );
         });
@@ -219,6 +223,7 @@ module.exports = function (server) {
      * @returns {Object} Promise
      */
     function sendRecovery(email, callback) {
+        callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             findUserByEmail(email).then(
                 function (user) {
@@ -232,14 +237,17 @@ module.exports = function (server) {
                                 '<p>Your recovery token</p>' + token.token
                             );
                             resolve(token);
+                            callback(null, token);
                         },
                         function (err) {
                             reject(err);
+                            callback(err);
                         }
                     );
                 },
                 function (err) {
                     reject(err);
+                    callback(err);
                 }
             );
         });
