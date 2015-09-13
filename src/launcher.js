@@ -13,10 +13,10 @@
 
     if (cluster.isMaster) {
         
-        if (!fs.existsSync('./config.json')) {
+        /*if (!fs.existsSync('./config.json')) {
             log.fatal('Cannot find config.json');
             process.exit(1);
-        }
+        }*/
         var config = require('./config.json');
         
         var apiProcessList = [];

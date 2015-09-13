@@ -24,6 +24,7 @@
             schemas: {},
             instance: null
         };
+        this.rootFolder = __dirname;
         this.middlewares = {};
         this.controllers = {};
         this.meta = {

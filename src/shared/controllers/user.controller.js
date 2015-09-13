@@ -225,31 +225,34 @@ module.exports = function (server) {
     function sendRecovery(email, callback) {
         callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
-            findUserByEmail(email).then(
-                function (user) {
-                    server.controller.userConfirm.createToken(user.email).then(
-                        function (token) {
-                            mailjet.sendContent(
-                                server.config.mailjet.sender, 
-                                [user.email],
-                                server.config.mailjet.subject,
-                                'html',
-                                '<p>Your recovery token</p>' + token.token
-                            );
-                            resolve(token);
-                            callback(null, token);
-                        },
-                        function (err) {
-                            reject(err);
-                            callback(err);
-                        }
-                    );
-                },
-                function (err) {
-                    reject(err);
-                    callback(err);
-                }
-            );
+          var doInOrder = server.helpers.doInOrder;
+          doInOrder.execute(
+            doInOrder.next(
+              function() {
+                return server.controller.userConfirm.createToken(user.email);
+              }
+            ),
+            doInOrder.next(
+              function(token) {
+                mailjet.sendContent(
+                    server.config.mailjet.sender,
+                    [user.email],
+                    server.config.mailjet.subject,
+                    'html',
+                    '<p>Your recovery token</p>' + token.token
+                );
+              }
+            )
+          ).then(
+            function(data) {
+              resolve(token);
+              callback(null, token);
+            },
+            function(err) {
+              reject(err);
+              callback(err);
+            }
+          );
         });
     }
 

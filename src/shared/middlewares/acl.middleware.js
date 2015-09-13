@@ -8,8 +8,10 @@ module.exports = function (server) {
     return function (req, res, next) {
         server.log.info('Acl middleware in action');
         var routeDesc = server.helpers.getRouteDescriptor(req);
-        server.log.info('  *', 'Route', routeDesc.route, 'URL', routeDesc.url);
-        if (!routeDesc) {
+        if (routeDesc) {
+            server.log.info('  *', 'Route', routeDesc.route, 'URL', routeDesc.url);
+        } else {
+            server.log.info('  *', 'No ACL on', req.method.toUpperCase(), req.url);
             return res.status(403).send({message: 'No ACL'});
         }
         var acl = routeDesc.descriptor.acl;

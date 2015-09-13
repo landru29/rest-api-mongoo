@@ -30,6 +30,7 @@ module.exports = function (options) {
         // REGISTER OUR ROUTES
         // =============================================================================
         expressApp.use(application.middlewares.cors);
+        expressApp.use(require('serve-favicon')(__dirname + '/shared/public/favicon.ico'));
         expressApp.use(function (req, res, next) {
             application.log.info(req.method.toUpperCase(), req.url);
             next();

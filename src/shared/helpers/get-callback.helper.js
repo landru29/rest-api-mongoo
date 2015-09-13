@@ -10,7 +10,6 @@ module.exports = function (server) {
 
         var lastArg = _.last(Array.prototype.slice.call(argArray));
         if ('function' === typeof lastArg) {
-            console.log('yes');
             return lastArg;
         } else {
             return function () {};

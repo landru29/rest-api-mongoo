@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Renew password</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .label-as-badge {
+            border-radius: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Renew your password</h1>
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="token">Token</label>
+                        <input type="text" class="form-control" id="token" placeholder="Token" value="<%= token %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="password1">Enter new password</label>
+                        <input type="password" class="form-control password" id="password1" name="password1" placeholder="Password">
+                        <span class="label label-danger label-as-badge">weak</span>
+                    </div>
+                    <div class="form-group repeat-password">
+                        <label for="password2">Again</label>
+                        <input type="password" class="form-control password" id="password2" name="password2" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-default" disabled>Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function getClasses(elt) {
+        return elt.className ? elt.className.split(/\s/) : [];
+    }
+
+    function removeClass(elt, className) {
+        var classes = getClasses(elt);
+        var index = classes.indexOf(className);
+        if (index > -1) {
+            classes.splice(index, 1)
+        }
+        elt.className = classes.join(' ');
+    }
+
+    function addClass(elt, className) {
+        var classes = getClasses(elt);
+        if (classes.indexOf(className) < 0) {
+            classes.push(className)
+        }
+        elt.className = classes.join(' ');
+    }
+
+    var passwordInput = document.getElementsByClassName('password');
+    var gpPassword = document.getElementsByClassName('repeat-password');
+    var button = document.getElementsByClassName('btn-default');
+    for (var i = 0; i < passwordInput.length; i++) {
+        passwordInput[i].addEventListener('input', function () {
+            if (passwordInput.length === 2) {
+                var acceptable = checkStrength(passwordInput[0].value);
+                if (passwordInput[0].value !== passwordInput[1].value) {
+                    removeClass(gpPassword[0], 'has-success');
+                    addClass(gpPassword[0], 'has-error');
+                    button[0].setAttribute('disabled', '');
+                } else {
+                    if (acceptable) {
+                        removeClass(gpPassword[0], 'has-error');
+                        addClass(gpPassword[0], 'has-success');
+                        button[0].removeAttribute('disabled');
+                    }
+                }
+            }
+        });
+    }
+    
+    function checkStrength(pass) {
+        var alert = document.getElementsByClassName('label');
+        var strength = scorePassword(pass);
+        if (strength < 50) {
+            removeClass(alert[0], 'label-warning');
+            removeClass(alert[0], 'label-success');
+            addClass(alert[0], 'label-danger');
+            alert[0].innerHTML = 'weak';
+            return false;
+        }
+        if ((strength >=50) && (strength <= 80)) {
+            removeClass(alert[0], 'label-danger');
+            removeClass(alert[0], 'label-success');
+            addClass(alert[0], 'label-warning');
+            alert[0].innerHTML = 'good';
+        }
+        
+        if (strength >80) {
+            removeClass(alert[0], 'label-danger');
+            removeClass(alert[0], 'label-warning');
+            addClass(alert[0], 'label-success');
+            alert[0].innerHTML = 'strong';
+        }
+        
+        return true;
+    }
+
+    function scorePassword(pass) {
+        var score = 0;
+        if (!pass)
+            return score;
+
+        // award every unique letter until 5 repetitions
+        var letters = new Object();
+        for (var i = 0; i < pass.length; i++) {
+            letters[pass[i]] = (letters[pass[i]] || 0) + 1;
+            score += 5.0 / letters[pass[i]];
+        }
+
+        // bonus points for mixing it up
+        var variations = {
+            digits: /\d/.test(pass),
+            lower: /[a-z]/.test(pass),
+            upper: /[A-Z]/.test(pass),
+            nonWords: /\W/.test(pass),
+        }
+
+        variationCount = 0;
+        for (var check in variations) {
+            variationCount += (variations[check] == true) ? 1 : 0;
+        }
+        score += (variationCount - 1) * 10;
+
+        return parseInt(score);
+    }
+</script>
+
+</html>
