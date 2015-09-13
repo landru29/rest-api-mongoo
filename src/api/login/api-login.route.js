@@ -35,5 +35,17 @@ module.exports = function(server) {
         });
     });
     
+    /**
+     * Password renew action
+     * @name /renew-password/:token
+     * @method POST
+     * @role -
+     * @param {String} token    @url @required token provided by email
+     * @public
+     */
+    router.post('/renew-password/:token', function(req, res) {
+        server.helpers.response(req, res, null, req.body);
+    });
+    
     return router;
 };
