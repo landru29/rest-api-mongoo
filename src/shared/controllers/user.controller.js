@@ -222,8 +222,11 @@ module.exports = function (server) {
      * @param   {String} email User email
      * @returns {Object} Promise
      */
-    function sendRecovery(email, callback) {
-        callback = server.helpers.getCallback(arguments);
+    function sendRecovery(email/*callback*/) {
+        var callback = server.helpers.getCallback(arguments);
+        var link = server.config.launcher.api.options.protocole + '://' + 
+            server.config.launcher.api.options.serverName + ':' + 
+            server.config.launcher.api.options.port + '/renew-password/';
         return q.promise(function (resolve, reject) {
           var doInOrder = server.helpers.doInOrder;
           doInOrder.execute(
@@ -234,12 +237,14 @@ module.exports = function (server) {
             ),
             doInOrder.next(
               function(token) {
+                link += encodeURIComponent(token.token);
                 mailjet.sendContent(
                     server.config.mailjet.sender,
                     [user.email],
                     server.config.mailjet.subject,
                     'html',
-                    '<p>Your recovery token</p>' + token.token
+                    '<h1>Change your password</h1>' + 
+                    '<a href="' + link + '">' + link + '</a>'
                 );
               }
             )

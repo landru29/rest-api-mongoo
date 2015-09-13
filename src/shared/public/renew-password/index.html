@@ -16,12 +16,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1>Renew your password</h1>
+                <% if (firstTime) { %>
+                    <h1>Define your password</h1>
+                <% } else { %>
+                    <h1>Renew your password</h1>
+                <% } %>
                 <form method="POST">
-                    <div class="form-group">
-                        <label for="token">Token</label>
-                        <input type="text" class="form-control" id="token" placeholder="Token" value="<%= token %>" name="token">
-                    </div>
+                    <input type="hidden" class="form-control" id="token" placeholder="Token" value="<%= token %>" name="token">
                     <div class="form-group">
                         <label for="password1">Enter new password</label>
                         <input type="password" class="form-control password" id="password1" name="password1" placeholder="Password">

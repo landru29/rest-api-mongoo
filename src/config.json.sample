@@ -22,6 +22,7 @@
             "script": "./server.js",
             "options": {
                 "protocole": "http",
+                "serverName": "localhost", 
                 "port": 8080
             }
         }
