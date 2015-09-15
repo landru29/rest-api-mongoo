@@ -23,7 +23,6 @@
         "docblock-parser": "0.1.3",
         "q": "1.4.1",
         "chalk": "1.1.1",
-        "mailjet-sendemail": "1.1.4",
         "serve-favicon": "2.3.0",
         "ejs": "2.3.4"
     },

@@ -3,8 +3,9 @@ module.exports = function (server) {
     var User = server.getModel('User');
     var _ = require('lodash');
     var q = require('q');
-    var Mailjet = require('mailjet-sendemail');
-    var mailjet = new Mailjet(server.config.mailjet.key, server.config.mailjet.secret);
+    //var Mailjet = require('mailjet-sendemail');
+    //var Mailjet = require('mailjet');
+    //var mailjet = new Mailjet(server.config.mailjet.key, server.config.mailjet.secret);
 
     /**
      * Generate an oauth refresh token
@@ -24,7 +25,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readUsers(/*, callback*/) {
+    function readUsers( /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return User.find(callback);
     }
@@ -35,14 +36,14 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function readUserById(id /*, callback*/) {
+    function readUserById(id /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             User.findById(id, callback).then(
-                function(data) {
+                function (data) {
                     resolve(_.first(data));
                 },
-                function(err) {
+                function (err) {
                     reject(err);
                 }
             );
@@ -55,7 +56,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function createUser(userData /*, callback*/) {
+    function createUser(userData /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         var user = new User();
         user.name = userData.name;
@@ -92,7 +93,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function deleteUser(id /*, callback*/) {
+    function deleteUser(id /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return User.remove({
             _id: id
@@ -106,7 +107,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function updateUser(id, userData /*, callback*/) {
+    function updateUser(id, userData /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject)  {
             User.findById(id, function (err, user) {
@@ -163,7 +164,7 @@ module.exports = function (server) {
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
-    function checkUser(email, password /*, callback*/) {
+    function checkUser(email, password /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             User.find({
@@ -194,7 +195,7 @@ module.exports = function (server) {
      * @param   {String} email User email
      * @returns {Object} Promise
      */
-    function findUserByEmail(email /*, callback*/) {
+    function findUserByEmail(email /*, callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
             User.find({
@@ -222,42 +223,46 @@ module.exports = function (server) {
      * @param   {String} email User email
      * @returns {Object} Promise
      */
-    function sendRecovery(email/*callback*/) {
+    function sendRecovery(email /*callback*/ ) {
         var callback = server.helpers.getCallback(arguments);
-        var link = server.config.launcher.api.options.protocole + '://' + 
-            server.config.launcher.api.options.serverName + ':' + 
-            server.config.launcher.api.options.port + '/renew-password/';
         return q.promise(function (resolve, reject) {
-          var doInOrder = server.helpers.doInOrder;
-          doInOrder.execute(
-            doInOrder.next(
-              function() {
-                return server.controller.userConfirm.createToken(user.email);
-              }
-            ),
-            doInOrder.next(
-              function(token) {
-                link += encodeURIComponent(token.token);
-                mailjet.sendContent(
-                    server.config.mailjet.sender,
-                    [user.email],
-                    server.config.mailjet.subject,
-                    'html',
-                    '<h1>Change your password</h1>' + 
-                    '<a href="' + link + '">' + link + '</a>'
-                );
-              }
-            )
-          ).then(
-            function(data) {
-              resolve(token);
-              callback(null, token);
-            },
-            function(err) {
-              reject(err);
-              callback(err);
-            }
-          );
+            var doInOrder = server.helpers.doInOrder;
+            doInOrder.execute([
+                doInOrder.next(
+                    function () {
+                        return findUserByEmail(email);
+                    }
+                ),
+                doInOrder.next(
+                    function (user) {
+                        return server.controllers.userConfirm.createToken(user.email);
+                    }
+                ),
+                doInOrder.next(
+                    function (token, user) {
+                        var link = server.config.launcher.api.options.protocole + '://' +
+                            server.config.launcher.api.options.serverName + ':' +
+                            server.config.launcher.api.options.port + '/api/login/renew-password/' +
+                            encodeURIComponent(token.token);
+                        server.log.info('Sending token', token.token, 'to', user.email);
+                        return server.helpers.mailjet({
+                            from: server.config.mailjet.sender,
+                            to: [user.email],
+                            subject: server.config.mailjet.subject,
+                            html: '<h1>Change your password</h1><a href="' + link + '">' + link + '</a>'
+                        });
+                    }
+                )
+            ]).then(
+                function (data) {
+                    resolve(data);
+                    callback(null, data);
+                },
+                function (err) {
+                    reject(err);
+                    callback(err);
+                }
+            );
         });
     }
 

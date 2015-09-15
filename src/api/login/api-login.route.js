@@ -73,7 +73,8 @@ module.exports = function(server) {
             if (err) {
                 res.status(404).json({
                     status: 'error',
-                    message: 'email not found'
+                    message: 'email not found',
+                    err: err
                 });
             } else {
                 server.helpers.response(req, res, err, {message: 'email sent'});
