@@ -138,8 +138,10 @@ module.exports = function (server) {
                             }
                             user.save(callback).then(function (data) {
                                 resolve(data);
+                                callback(null, data);
                             }, function (err) {
                                 reject(err);
+                                callback(err);
                             });
                         },
                         function (err) {
@@ -149,8 +151,10 @@ module.exports = function (server) {
                 } else {
                     user.save(callback).then(function (data) {
                         resolve(data);
+                        callback(null, data);
                     }, function (err) {
                         reject(err);
+                        callback(err);
                     });
                 }
             });
@@ -230,21 +234,16 @@ module.exports = function (server) {
             doInOrder.execute([
                 doInOrder.next(
                     function () {
-                        return findUserByEmail(email);
+                        return server.controllers.userConfirm.createToken(email);
                     }
                 ),
                 doInOrder.next(
-                    function (user) {
-                        return server.controllers.userConfirm.createToken(user.email);
-                    }
-                ),
-                doInOrder.next(
-                    function (token, user) {
+                    function (token) {
                         var link = server.config.launcher.api.options.protocole + '://' +
                             server.config.launcher.api.options.serverName + ':' +
                             server.config.launcher.api.options.port + '/api/login/renew-password/' +
                             encodeURIComponent(token.token);
-                        server.log.info('Sending token', token.token, 'to', user.email);
+                        server.log.info('Sending token', token.token, 'to', token.email);
                         return server.helpers.mailjet({
                             from: server.config.mailjet.sender,
                             to: [user.email],

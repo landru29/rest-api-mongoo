@@ -50,14 +50,23 @@ module.exports = function(server) {
      * @name /renew-password/:token
      * @method POST
      * @role -
-     * @param {String} tokenUri  @url @required token provided by email
-     * @param {String} token     @body @optional token
+     * @param {String} token     @url @required token provided by email
      * @param {String} password1 @body @required new password
-     * @param {String} password1 @body @required new password again
+     * @param {String} password2 @body @required new password again
      * @public
      */
-    router.post('/renew-password/:tokenUri', function(req, res) {
-        server.helpers.response(req, res, null, req.body);
+    router.post('/renew-password/:token', function(req, res) {
+        userConfirm.updatePassword(req.params.token, req.body.password1, function(err, data){
+            if (err) {
+                res.status(404).json({
+                    status: 'error',
+                    message: 'Invalid token',
+                    err: err
+                });
+            } else {
+                server.helpers.response(req, res, err, data, {message: {success: 'User updated'}});
+            }
+        });
     });
     
     /**

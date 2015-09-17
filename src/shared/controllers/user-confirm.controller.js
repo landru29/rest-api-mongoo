@@ -33,12 +33,37 @@ module.exports = function (server) {
         });
     }
     
-    
-    function cleanTokens(/*, callback*/) {
+    /**
+     * Update a password
+     * @param   {String} token    Recieved by email
+     * @param   {String} password New password
+     * @param {function} callback Callback function
+     * @returns {Object} Promise
+     */
+    function updatePassword(token, password /*, callback*/) {
         var callback = server.helpers.getCallback(arguments);
-        return User.remove({
-            expire: {$gt: new Date()}
-        }, callback);
+        var userCtrl = server.controllers.user;
+        return q.promise(function (resolve, reject) {
+            findByToken(token).then(
+                function(userToken) {
+                    userCtrl.updateUser(
+                        userToken.userId, 
+                        {
+                            password: password
+                        }
+                    ).then(function(data){
+                        resolve(data);
+                        callback(null, data);
+                    }, function(err) {
+                        reject(err);
+                        callback(err);
+                    });
+                }, function(err) {
+                    reject(err);
+                    callback(err);
+                }
+            );
+        });
     }
 
    
@@ -50,39 +75,44 @@ module.exports = function (server) {
      */
     function createToken(email /*, callback*/) {
         var callback = server.helpers.getCallback(arguments);
-        var token = new UserConfirm();
-        token.email = email;
         return q.promise(function (resolve, reject) {
-            token.save(function (err, createdToken) {
-                if (!err) {
-                    resolve(createdToken);
-                    callback(null, createdToken);
-                } else {
+             var doInOrder = server.helpers.doInOrder;
+            doInOrder.execute([
+                
+                doInOrder.next(
+                    function () {
+                        var userCtrl = server.controllers.user;
+                        return userCtrl.findUserByEmail(email);
+                    }
+                ),
+                
+                doInOrder.next(
+                    function (user) {
+                        var token = new UserConfirm();
+                        token.email = email;
+                        token.userId = user._id;
+                        return token.save();
+                    }
+                )
+                
+            ]).then(
+                function(data) {
+                    resolve({
+                        email: data[0].email,
+                        token: data[0].token
+                    });
+                }, 
+                function(err) {
                     reject(err);
-                    callback(err);
                 }
-            });
+            );
         });
-    }
-
-    /**
-     * Delete a token
-     * @param {String}   token Validation token
-     * @param {function} callback Callback function
-     * @returns {Object} Promise
-     */
-    function deleteToken(token /*, callback*/) {
-        var callback = server.helpers.getCallback(arguments);
-        return UserConfirm.remove({
-            token: token
-        }, callback);
     }
 
 
     return {
         findByToken: findByToken,
         createToken: createToken,
-        deleteToken: deleteToken,
-        cleanTokens: cleanTokens
+        updatePassword: updatePassword
     };
 };

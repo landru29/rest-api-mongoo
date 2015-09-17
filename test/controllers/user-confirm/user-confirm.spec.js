@@ -4,6 +4,7 @@
     var assert = require('chai').assert;
     var testFrame = require('../../test-frame.js');
     var fixtures = require('./user-confirm.fixture.json');
+    var userFixtures = require('./user.fixture.json');
     var _ = require('lodash');
     var currentTokens;
 
@@ -12,15 +13,26 @@
 
         beforeEach(function (done) {
             var doInOrder = testFrame().helpers.doInOrder;
-            var tasks = fixtures.map(function (email) {
+            
+            var tasks = [];
+            
+            tasks = tasks.concat(userFixtures.map(function (user) {
+                return doInOrder.next(
+                    function() {
+                        return testFrame().controllers.user.createUser(user);
+                    }
+                );
+            }));
+            
+            tasks = tasks.concat(fixtures.map(function (email) {
                 return doInOrder.next(
                     function () {
                         return testFrame().controllers.userConfirm.createToken(email.email);
                     }
                 );
-            });
+            }));
             doInOrder.execute(tasks).then(function (data) {
-                currentTokens = data;
+                currentTokens = data.slice(0, data.length/2);;
                 done();
             }, function (err) {
                 done(err || 'beforeEach');
@@ -55,26 +67,6 @@
                 done();
             });
         });
-
-        describe('#deleteToken', function () {
-            it('Should delete a token', function (done) {
-                var doInOrder = testFrame().helpers.doInOrder;
-                doInOrder.execute([
-                    doInOrder.next(function() {
-                        return testFrame().controllers.userConfirm.deleteToken(fixtures[0].token);
-                    }),
-                    doInOrder.next(function() {
-                        return testFrame().controllers.userConfirm.findByToken(fixtures[0].token);
-                    })
-                ]).then(function (data) {
-                    done('Should not find any token');
-                }, function (err) {
-                    assert.equal(err, 'Token not found');
-                    done();
-                });
-
-            });
-        });    
 
     });
 })();

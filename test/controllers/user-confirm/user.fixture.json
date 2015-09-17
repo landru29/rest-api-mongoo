@@ -1,0 +1,22 @@
+[
+    {
+        "name": "foo1",
+        "email": "0bob@free.fr",
+        "password": "plutot"
+    },
+    {
+        "name": "foo2",
+        "email": "0tata@free.fr",
+        "password": "plutot"
+    },
+    {
+        "name": "foo3",
+        "email": "0boby@free.fr",
+        "password": "plutot"
+    },
+    {
+        "name": "foo4",
+        "email": "0foo@free.fr",
+        "password": "plutot"
+    }
+]
