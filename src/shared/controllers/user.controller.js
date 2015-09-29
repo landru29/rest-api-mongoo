@@ -244,12 +244,16 @@ module.exports = function (server) {
                             server.config.launcher.api.options.port + '/api/login/renew-password/' +
                             encodeURIComponent(token.token);
                         server.log.info('Sending token', token.token, 'to', token.email);
-                        return server.helpers.mailjet({
-                            from: server.config.mailjet.sender,
-                            to: [user.email],
-                            subject: server.config.mailjet.subject,
-                            html: '<h1>Change your password</h1><a href="' + link + '">' + link + '</a>'
-                        });
+                        if (server.config['mail-sender'].disabled) {
+                            return q.promise(function (resolve) {resolve();});
+                        } else {
+                            return server.helpers.mailjet({
+                                from: server.config['mail-sender'].mailjet.sender,
+                                to: [user.email],
+                                subject: server.config['mail-sender'].mailjet.subject,
+                                html: '<h1>Change your password</h1><a href="' + link + '">' + link + '</a>'
+                            });
+                        }
                     }
                 )
             ]).then(

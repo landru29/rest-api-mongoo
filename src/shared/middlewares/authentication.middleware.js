@@ -19,6 +19,9 @@ module.exports = function (server) {
         server.helpers.oauth.decrypt(accessToken, 'access-token', function (err, data) {
             if (!err) {
                 req.user = data;
+                req.getUserId = function(){
+                    return data.id;
+                };
                 server.log.info('  *', 'roles', 'USER:' + req.acl.role + ' - RES:' + data.role);
                 if ((req.acl.role.indexOf('*') !==-1) || ((req.hasRole(data.role)) && (req.isAllowedApplication()))) {
                     return next();

@@ -95,32 +95,34 @@ module.exports = function (server) {
     /**
      * [[Description]]
      * @param {String} id         Application Identifier
-     * @param {Object}   ApplicationData Application {name, email, password}
+     * @param {Object}   ApplicationData Application {name, active}
      * @param {function} callback Callback function
      * @returns {Object} Promise
      */
     function updateApplication(id, applicationData /*, callback*/) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
-            Application.findById(id, function (err, application) {
-                if (err) {
+            readApplicationById(id).then(
+                function(application) {
+                    if (applicationData.name) {
+                        application.name = applicationData.name;
+                    }
+                    if (applicationData.active) {
+                        application.active = applicationData.active;
+                    }
+                    application.save(callback).then(function (data) {
+                        resolve(data);
+                        callback(null, data);
+                    }, function (err) {
+                        reject(err);
+                        callback(err);
+                    });
+                },
+                function(err) {
                     reject(err);
                     return callback(err);
                 }
-                if (applicationData.name) {
-                    application.name = applicationData.name;
-                }
-                if (applicationData.active) {
-                    application.active = applicationData.active;
-                }
-                application.save(callback).then(function (data) {
-                    resolve(data);
-                    callback(null, data);
-                }, function (err) {
-                    reject(err);
-                    callback(err);
-                });
-            });
+            );
         });
     }
 

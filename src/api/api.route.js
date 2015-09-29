@@ -30,6 +30,12 @@ module.exports = function (server) {
      * @name        application
      */
     router.use('/application', require('./application/api-application.route.js')(server));
+    
+    /**
+     * @followRoute ./tournament/api-tournament.route.js
+     * @name        tournament
+     */
+    router.use('/tournament', require('./tournament/api-tournament.route.js')(server));
 
     return router;
 };
