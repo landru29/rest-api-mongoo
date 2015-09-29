@@ -7,7 +7,7 @@ module.exports = function (server) {
 
     return function (data) {
         
-        var config = server.config['mail-sender'].mailjet
+        var config = server.config['mail-sender'].mailjet;
 
         var keyPair = [config.key, config.secret].join(':');
         var authent = new Buffer(keyPair).toString('base64');

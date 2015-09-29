@@ -4,6 +4,7 @@
     var config = require('./test-conf.json');
     var q = require('q');
     var App = require('../src/app.js');
+    var userFixtures = require('./fixtures/users.fixture.json');
 
     var globalData;
 
@@ -30,6 +31,25 @@
             }
         );
     };
+    
+    var loadFixtures = function(doneFixture) {
+        var doInOrder = globalData.helpers.doInOrder;
+        var tasks = [];
+        userFixtures.forEach(function(elt) {
+            tasks.push(doInOrder.next(
+                    function() {
+                        return globalData.controllers.user.createUser(elt);
+                    }
+                )
+             );
+        });
+        doInOrder.execute(tasks).then(function () {
+                doneFixture();
+            }, function (err) {
+                doneFixture(err || 'beforeEach');
+            }
+        );
+    };
 
     beforeEach(function (done) {;
         if (!globalData) {
@@ -44,16 +64,19 @@
                 }
             });
             globalData.bootstrap(function () {
-                clearDb(globalData, done);
+                clearDb(globalData, function() {
+                    loadFixtures(done);
+                });
             });
             
         } else {
             globalData.connectDb(function () {
-                clearDb(globalData, done);
+                clearDb(globalData, function() {
+                    loadFixtures(done);
+                });
             });
         }
     });
-
 
     afterEach(function (done) {
         mongoose.disconnect();

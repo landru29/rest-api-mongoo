@@ -82,7 +82,7 @@
                 testFrame().controllers.user.readUsers().then(
                     function (users) {
                         assert.isArray(users);
-                        assert.equal(users.length, fixtures.length);
+                        assert.equal(users.length, fixtures.length + 2); // 2 users are preloaded
                         done()
                     },
                     function (err) {
@@ -105,7 +105,7 @@
                     doInOrder.next(testFrame().controllers.user.readUsers, null)
                 ]).then(function (data) {
                     var user = _.first(data);
-                    assert.equal(user.length, fixtures.length - 1);
+                    assert.equal(user.length, fixtures.length + 2 - 1); // 2 users are preloaded
                     done();
                 }, function (err) {
                     done(err);

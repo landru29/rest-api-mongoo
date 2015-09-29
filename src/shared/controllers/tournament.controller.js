@@ -28,9 +28,11 @@ module.exports = function (server) {
     function readTournamentById(userId, id /*, callback*/) {
         var callback = server.helpers.getCallback(arguments);
         var filter = {
-            _id: id,
-            userId: userId ? {userId: userId} : undefined
+            _id: id
         };
+        if (userId) {
+            filter.userId = userId;
+        }
         return q.promise(function (resolve, reject) {
             Tournament.find(filter, function(err, list) {
                     callback(err, _.first(list));
@@ -82,11 +84,13 @@ module.exports = function (server) {
      */
     function deleteTournament(userId, id /*, callback*/) {
         var filter = {
-            _id: id,
-            userId: userId ? {userId: userId} : undefined
+            _id: id
         };
+        if (userId) {
+            filter.userId = userId;
+        }
         var callback = server.helpers.getCallback(arguments);
-        return Tournament.remove(ilter, callback);
+        return Tournament.remove(filter, callback);
     }
 
     /**
