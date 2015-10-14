@@ -82,6 +82,13 @@ module.exports = function (grunt) {
                         src: ['**/*.js'],
                         dest: '<%= project.dist%>'
                     },
+                    { //assets,
+                        cwd: '<%= project.app%>',
+                        flatten: false,
+                        expand: true,
+                        src: ['assets/**/*.*'],
+                        dest: '<%= project.dist%>'
+                    },
                     { //deps,
                         flatten: false,
                         expand: true,
