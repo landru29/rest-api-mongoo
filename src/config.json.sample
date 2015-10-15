@@ -35,5 +35,8 @@
             "sender": "noreply@free.fr",
             "subject": "NOOPY - Account recovery"
         }
+    },
+    "acl": {
+        "ignore":[]
     }
 }

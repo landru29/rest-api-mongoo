@@ -6,4 +6,6 @@ module.exports = function(server) {
      * @name        api
      */
     server.app.use('/api', server.middlewares.authentication, require('./api/api.route.js')(server));
+
+    server.app.use('/assets', require('./assets/assets.route.js')(server));
 };
