@@ -47,6 +47,14 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        
+        less: {
+          assets: {
+            files: {
+                "src/assets/data/flags/style.css": "src/assets/data/flags/less/flag-icon.less"
+            }
+          }
+        },
 
         jshint: {
             dev: [
@@ -86,7 +94,7 @@ module.exports = function (grunt) {
                         cwd: '<%= project.app%>',
                         flatten: false,
                         expand: true,
-                        src: ['assets/**/*.*'],
+                        src: ['assets/**/*.*', '!assets/**/*.less'],
                         dest: '<%= project.dist%>'
                     },
                     { //deps,
@@ -118,6 +126,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'fileExists',
         'jshint',
+        'less',
         'clean:dist',
         'copy',
         'file-creator',

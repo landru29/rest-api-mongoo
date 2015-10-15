@@ -33,3 +33,5 @@ dist
 dist.tgz
 
 config.json
+
+src/assets/data/*.css

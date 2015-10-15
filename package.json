@@ -36,6 +36,7 @@
         "grunt-contrib-clean": "0.6.0",
         "grunt-contrib-copy": "0.7.0",
         "grunt-contrib-compress":"0.13.0",
+        "grunt-contrib-less":"1.0.1",
         "grunt-file-exists":"0.1.2",
         "grunt-file-creator": "0.1.3"
     }
