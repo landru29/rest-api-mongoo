@@ -9,7 +9,7 @@ module.exports = function (server) {
         toIgnore.forEach(function(ignore) {
             if ((new RegExp(ignore)).test(url)) {
                 server.log.info('  *', 'ACL are ignored on route', url, 'due to regExp', ignore);
-                ignoreResult = true
+                ignoreResult = true;
             }
         });
         return ignoreResult;
