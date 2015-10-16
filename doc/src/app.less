@@ -4,6 +4,7 @@
 @endpoint-color: #123456;
 @endpoint-header-bg: #eaeaea;
 @endpoint-header-deploy: #888888;
+@main-route-bg: @endpoint-header-bg;
 
 @get-color: #0000ff;
 @post-color: #ffa600;
@@ -49,53 +50,68 @@ div.error {
     }
 }
 
+div.main-route {
+    font-size: 1.5em;
+    border-bottom: solid 1px lighten(@header-color, 20%);
+    color: @endpoint-color;
+    padding: 5px 0 5px 0;
+    margin-bottom: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: @main-route-bg;
+    }
+}
 
-section.endpoint{
-    margin: 2px 0 2px 0;
-    dl {
+div.endpoints-list {
+    margin-left: 20px;
+    section.endpoint{
         margin: 2px 0 2px 0;
-    }
-    span.description {
-        font-weight: normal;
-        font-style: italic;
-    }
-    
-    div.endpoint-header {
-        padding: 5px 0 5px 0;
-        font-weight: bold;
-        cursor: pointer;
-        background-color: @endpoint-header-bg;
-        .deploy-button {
-            display: none;
-            color: @endpoint-header-deploy
+        dl {
+            margin: 2px 0 2px 0;
         }
-        &:hover {
+        span.description {
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        div.endpoint-header {
+            padding: 5px 0 5px 0;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: @endpoint-header-bg;
             .deploy-button {
-                display: inherit;
+                display: none;
+                color: @endpoint-header-deploy
             }
-        }
-        span.method {
-            color: white;
-            padding: 2px 0px 2px 0px;
-            width: 70px;
-            display: inline-block;
-            text-align: center;
-            .rounded(3px);
-
-            &.method-get {
-                background-color: @get-color;
+            &:hover {
+                .deploy-button {
+                    display: inherit;
+                }
             }
+            span.method {
+                color: white;
+                font-size: 0.8em;
+                padding: 2px 0px 2px 0px;
+                width: 70px;
+                display: inline-block;
+                text-align: center;
+                .rounded(3px);
 
-            &.method-post {
-                background-color: @post-color;
-            }
+                &.method-get {
+                    background-color: @get-color;
+                }
 
-            &.method-delete {
-                background-color: @delete-color;
-            }
+                &.method-post {
+                    background-color: @post-color;
+                }
 
-            &.method-put {
-                background-color: @put-color;
+                &.method-delete {
+                    background-color: @delete-color;
+                }
+
+                &.method-put {
+                    background-color: @put-color;
+                }
             }
         }
     }

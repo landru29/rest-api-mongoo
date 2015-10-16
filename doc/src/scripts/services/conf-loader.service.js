@@ -1,13 +1,24 @@
 angular.module('Documentation').service('ConfLoader', function ($resource, appConfiguration, $q) {
     return function() {
+        var getMainRoute = function(route) {
+            var matcher = route.match(/^(\/\w*).*/);
+            if (matcher) {
+                return  matcher[1];
+            }
+        };
         return $q(function(resolve, reject) {
             $resource(appConfiguration.url).get().$promise.then(
                 function (data) {
                     var result = {};
                     Object.keys(data.routes).forEach(function(route){
-                        var mainRoute = route.replace(/\/?api/, '');
-                        
-                        result[mainRoute] = data.routes[route];
+                        var cleanRoute = route.replace(/^\/?api/, '');
+                        var mainRoute = getMainRoute(cleanRoute);
+                        if (!result[mainRoute]) {
+                            result[mainRoute] = {
+                                data: {}
+                            };
+                        }
+                        result[mainRoute].data[cleanRoute] = data.routes[route];
                     });
                     resolve(result);
                 }, reject
