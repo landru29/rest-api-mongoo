@@ -4,10 +4,12 @@ angular.module('Documentation').controller('MainCtrl', function($scope, ConfLoad
     
     
     this.init = function() {
-        ConfLoader.get().$promise.then(function(data) {
-            self.endpoints = data.routes;//{root: '/', endP:data.endpoints};
-            console.log(self.endpoints);
-        });
+        (new ConfLoader()).then(
+            function(data) {
+                self.endpoints = data;
+                console.log(data);
+            }
+        );
     };
     
     this.parseParameters = function(parameters) {
@@ -38,7 +40,7 @@ angular.module('Documentation').controller('MainCtrl', function($scope, ConfLoad
             rest.push(encodeURIComponent(key) + '=' + encodeURIComponent(thisParams[key]));
         }
         uri += rest.length ? '?' + rest.join('&') : '';
-        return appConfiguration.url + uri.replace(/^\/?api\//, '');
+        return appConfiguration.url + uri.replace(/^\/?(api\/)?/, '');
     };
     
     this.request = function(route, method, metadata) {

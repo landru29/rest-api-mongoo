@@ -7,15 +7,18 @@
                 <ul class="list-unstyled">
                     <li data-ng-repeat="(method,metadata) in methods">
                         <section class="endpoint">
-                            <div class="row method-{{method}}" data-ng-click="metadata.visible = !metadata.visible">
+                            <div class="row endpoint-header" data-ng-click="metadata.visible = !metadata.visible">
                                 <div class="col-md-1">
-                                    <span class="method">{{method}}</span>
+                                    <span class="method method-{{method}}">{{method.toUpperCase()}}</span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     {{route}}
                                 </div>
                                 <div class="col-md-5">
                                     {{metadata.description}}
+                                </div>
+                                <div class="col-md-1">
+                                    <span class="deploy-button">{{metadata.visible ? '<' : '>'}}</span>
                                 </div>
                             </div>
                             <div data-ng-show="metadata.visible">
