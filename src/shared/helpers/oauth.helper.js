@@ -2,7 +2,7 @@
 module.exports = function (server) {
     'use strict';
     var jwt = require('jsonwebtoken');
-    
+
     function getEncryptor(encryptorName) {
         if (!encryptorName) {
             throw 'No encryptor specified';
@@ -13,7 +13,7 @@ module.exports = function (server) {
         }
         return encryptor;
     }
-    
+
     return {
 
         /**
@@ -40,12 +40,11 @@ module.exports = function (server) {
          * @param   {Object} data          Data to decrypt
          * @param   {String} encryptorName Name of the encryptor specfied in authentication.json
          * @param   {function} callback    Callback function
-         * @returns {Object} decrypted data
          */
         decrypt: function (data, encryptorName, callback) {
             var encryptor = getEncryptor(encryptorName);
             jwt.verify(data, encryptor.secret, callback);
         }
-        
+
     };
 };

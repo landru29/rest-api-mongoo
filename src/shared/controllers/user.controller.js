@@ -3,9 +3,6 @@ module.exports = function (server) {
     var User = server.getModel('User');
     var _ = require('lodash');
     var q = require('q');
-    //var Mailjet = require('mailjet-sendemail');
-    //var Mailjet = require('mailjet');
-    //var mailjet = new Mailjet(server.config.mailjet.key, server.config.mailjet.secret);
 
     /**
      * Generate an oauth refresh token
@@ -18,6 +15,21 @@ module.exports = function (server) {
             _id: user._id,
             name: user.name
         }, 'refresh-token');
+    }
+
+    /**
+     * Generate an oauth access token
+     * @param   {Object} user Mongoose User
+     * @returns {String}      Refresh token
+     */
+    function generateAccessToken(user) {
+        user.created = new Date().getTime();
+        return server.helpers.oauth.encrypt({
+            _id: user._id,
+            name: user.name,
+            role: user.role,
+            applications: user.applications
+        }, 'access-token');
     }
 
     /**
@@ -69,16 +81,14 @@ module.exports = function (server) {
         return q.promise(function (resolve, reject) {
             user.save(function (err, createdUser) {
                 if (!err) {
-                    resolve(_.extend({
-                            'refresh-token': generateRefreshToken(createdUser)
+                    var resp = _.extend({
+                            'refresh-token': generateRefreshToken(createdUser),
+                            'access-token': generateAccessToken(createdUser)
                         },
                         createdUser._doc
-                    ));
-                    callback(null, _.extend({
-                            'refresh-token': generateRefreshToken(createdUser)
-                        },
-                        createdUser._doc
-                    ));
+                    );
+                    resolve(resp);
+                    callback(null, resp);
                 } else {
                     reject(err);
                     callback(err);
@@ -179,12 +189,13 @@ module.exports = function (server) {
                     return callback('Failed to login');
                 } else {
                     if (_.first(data).comparePassword(password)) {
-                        resolve({
-                            'refresh-token': generateRefreshToken(_.first(data))
-                        });
-                        return callback(null, {
-                            'refresh-token': generateRefreshToken(_.first(data))
-                        });
+                      var thisUser = _.first(data);
+                      var resp = {
+                              'refresh-token': generateRefreshToken(thisUser),
+                              'access-token': generateAccessToken(thisUser)
+                          };
+                      resolve(resp);
+                      callback(null, resp);
                     } else {
                         reject('Failed to login');
                         return callback('Failed to login');
