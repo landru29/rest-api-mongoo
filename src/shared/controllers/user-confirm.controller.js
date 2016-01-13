@@ -3,7 +3,8 @@ module.exports = function (server) {
     var UserConfirm = server.getModel('UserConfirm');
     var _ = require('lodash');
     var q = require('q');
-    
+    var waterfall = require('promise-waterfall');
+
     /**
      * Get Token
      * @param   {String} token Validation token
@@ -32,7 +33,7 @@ module.exports = function (server) {
             );
         });
     }
-    
+
     /**
      * Update a password
      * @param   {String} token    Recieved by email
@@ -47,7 +48,7 @@ module.exports = function (server) {
             findByToken(token).then(
                 function(userToken) {
                     userCtrl.updateUser(
-                        userToken.userId, 
+                        userToken.userId,
                         {
                             password: password
                         }
@@ -66,7 +67,7 @@ module.exports = function (server) {
         });
     }
 
-   
+
     /**
      * Create a token
      * @param {Object}   email User email
@@ -76,36 +77,28 @@ module.exports = function (server) {
     function createToken(email /*, callback*/) {
         var callback = server.helpers.getCallback(arguments);
         return q.promise(function (resolve, reject) {
-             var doInOrder = server.helpers.doInOrder;
-            doInOrder.execute([
-                
-                doInOrder.next(
-                    function () {
-                        var userCtrl = server.controllers.user;
-                        return userCtrl.findUserByEmail(email);
-                    }
-                ),
-                
-                doInOrder.next(
-                    function (user) {
-                        var token = new UserConfirm();
-                        token.email = email;
-                        token.userId = user._id;
-                        return token.save();
-                    }
-                )
-                
-            ]).then(
-                function(data) {
-                    resolve({
-                        email: data[0].email,
-                        token: data[0].token
-                    });
-                }, 
-                function(err) {
-                    reject(err);
-                }
-            );
+          waterfall([
+            function () {
+                var userCtrl = server.controllers.user;
+                return userCtrl.findUserByEmail(email);
+            },
+            function (user) {
+                var token = new UserConfirm();
+                token.email = email;
+                token.userId = user._id;
+                return token.save();
+            }
+          ]).then(
+              function(data) {
+                  resolve({
+                      email: data.email,
+                      token: data.token
+                  });
+              },
+              function(err) {
+                  reject(err);
+              }
+          );
         });
     }
 
