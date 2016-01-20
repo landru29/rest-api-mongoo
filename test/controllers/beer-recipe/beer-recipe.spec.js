@@ -34,7 +34,7 @@
 
     describe('#readRecipes', function() {
       it('Should read a recipe', function(done) {
-        testFrame().controllers.beerRecipe.readRecipes().then(
+        testFrame().controllers.beerRecipe.readRecipes(user._id).then(
           function(recipeData) {
             assert.isArray(recipeData);
             recipeData.forEach(function(elt) {
