@@ -27,7 +27,7 @@ module.exports = function (server) {
         return q.promise(function (resolve, reject) {
             Application.findById(id, callback).then(
                 function(data) {
-                    resolve(_.first(data));
+                    resolve(data);
                 },
                 function(err) {
                     reject(err);

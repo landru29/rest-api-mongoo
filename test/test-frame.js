@@ -1,6 +1,7 @@
 (function () {
     'use strict';
     var mongoose = require('mongoose');
+    var waterfall = require('promise-waterfall');
     var config = require('./test-conf.json');
     var q = require('q');
     var App = require('../src/app.js');
@@ -31,24 +32,18 @@
             }
         );
     };
-    
+
     var loadFixtures = function(doneFixture) {
-        var doInOrder = globalData.helpers.doInOrder;
-        var tasks = [];
-        userFixtures.forEach(function(elt) {
-            tasks.push(doInOrder.next(
-                    function() {
-                        return globalData.controllers.user.createUser(elt);
-                    }
-                )
-             );
+        var tasks = userFixtures.map(function(elt){
+          return function() {
+            return globalData.controllers.user.createUser(elt);
+          }
         });
-        doInOrder.execute(tasks).then(function () {
-                doneFixture();
-            }, function (err) {
-                doneFixture(err || 'beforeEach');
-            }
-        );
+        waterfall(tasks).then(function() {
+          doneFixture();
+        }, function(err) {
+          doneFixture(err || 'beforeEach');
+        });
     };
 
     beforeEach(function (done) {;
@@ -68,7 +63,7 @@
                     loadFixtures(done);
                 });
             });
-            
+
         } else {
             globalData.connectDb(function () {
                 clearDb(globalData, function() {

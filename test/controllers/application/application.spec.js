@@ -9,10 +9,10 @@
 
 
   describe('Application: Controller', function() {
-
     beforeEach(function(done) {
       waterfall(fixtures.map(function(appli) {
         return function() {
+
           return testFrame().controllers.application.createApplication(appli);
         };
       })).then(function() {

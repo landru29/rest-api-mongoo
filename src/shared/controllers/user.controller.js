@@ -54,7 +54,7 @@ module.exports = function(server) {
     return q.promise(function(resolve, reject) {
       User.findById(id, callback).then(
         function(data) {
-          resolve(_.first(data));
+          resolve(data);
         },
         function(err) {
           reject(err);
